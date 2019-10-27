@@ -1,12 +1,20 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import {
   StyleSheet,
   View,
   Text,
 } from 'react-native';
-const WelcomePage: () => React$Node = () => {
+import NavigatorUtil from '../navigator/NavigatorUtil'
+const WelcomePage: () => React$Node = (props) => {
+    let [timer,setTimer]=useState(null);
     useEffect(()=>{
-        
+
+        timer=setTimeout(()=>{
+            NavigatorUtil.resetToHomePage(props);
+        },2000)
+        return function cleanup(){
+            timer&&clearTimeout(timer);
+        }
     })
     return (
     <View style={styles.container}>
