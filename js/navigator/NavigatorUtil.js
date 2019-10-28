@@ -8,4 +8,12 @@ export default class NavigarorUtil{
     static goBack(navigation){
         navigation.goBack();
     }
+    static gotoPage(params,page){
+        const navigation=NavigarorUtil.navigation;
+        if(!navigation){
+            console.log('navigation不能为空');
+            return
+        }
+        navigation.navigate(page,{...params})
+    }
 }

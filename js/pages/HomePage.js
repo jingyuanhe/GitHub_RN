@@ -13,7 +13,8 @@ import MyPage from "./MyPage";
 import TrendingIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AntDesign from "react-native-vector-icons/AntDesign";
-const HomePage: () => React$Node = () => {
+import NavigatorUtil from '../navigator/NavigatorUtil'
+const HomePage: () => React$Node = (props) => {
   function _tabNavigator(){
     return createBottomTabNavigator({
       PopularPage:{
@@ -82,6 +83,7 @@ const HomePage: () => React$Node = () => {
       barStyle: { backgroundColor: '#694fad' },
     })
   }
+  NavigatorUtil.navigation=props.navigation;
   const Tab=createAppContainer(_tabNavigator());
   return (
     <Tab />

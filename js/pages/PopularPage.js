@@ -4,6 +4,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import NavigatorUtil from '../navigator/NavigatorUtil'
 import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 const PopularPage: () => React$Node = () => {
@@ -32,6 +33,7 @@ function TopNavigator(props){
   return(
     <View style={styles.container}>
       <Text style={styles.welcome}>{tabLabel}</Text>
+      <Text onPress={()=>{NavigatorUtil.gotoPage({},'DetailPage')}}>跳转到详情</Text>
     </View>
   )
 }
