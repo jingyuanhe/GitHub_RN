@@ -11,7 +11,7 @@ const WelcomePage: () => React$Node = (props) => {
 
         timer=setTimeout(()=>{
             NavigatorUtil.resetToHomePage(props);
-        },2000)
+        },200)
         return function cleanup(){
             timer&&clearTimeout(timer);
         }
