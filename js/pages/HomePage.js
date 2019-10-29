@@ -14,79 +14,12 @@ import TrendingIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NavigatorUtil from '../navigator/NavigatorUtil'
+import DyNamicTabNavigator from "../navigator/DyNamicTabNavigator";
 const HomePage: () => React$Node = (props) => {
-  function _tabNavigator(){
-    return createBottomTabNavigator({
-      PopularPage:{
-        screen:PopularPage,
-        navigationOptions:{
-          tabBarLabel:'最热',
-          tabBarIcon:({focused,tintColor})=>(
-            <MaterialIcons
-              name={"whatshot"}
-              size={27}
-              style={{color:tintColor}}
-            >
-            </MaterialIcons>
-          )
-        }
-      },
-      TrendingPage:{
-        screen:TrendingPage,
-        navigationOptions:{
-          tabBarLabel:'趋势',
-          tabBarIcon:({focused, tintColor})=>(
-            <TrendingIcon
-              name={"trending-up"}
-              size={27}
-              style={{color:tintColor}}
-            >
-
-            </TrendingIcon>
-          )
-        }
-      },
-      FavoritePage:{
-        screen:FavoritePage,
-        navigationOptions:{
-          tabBarLabel:'最爱',
-          tabBarIcon:({focused,tintColor})=>(
-            <MaterialIcons
-              name={"favorite"}
-              size={27}
-              style={{color:tintColor}}
-            >
-
-            </MaterialIcons>
-          )
-        }
-      },
-      MyPage:{
-        screen:MyPage,
-        navigationOptions:{
-          tabBarLabel:'我的',
-          tabBarIcon:({focused,tintColor})=>(
-            <AntDesign
-              name={"user"}
-              size={27}
-              style={{color:tintColor}}
-            >
-
-            </AntDesign>
-          )
-        }
-      }
-    },{
-      initialRouteName: 'PopularPage',
-      activeColor: '#f0edf6',
-      inactiveColor: '#3e2465',
-      barStyle: { backgroundColor: '#694fad' },
-    })
-  }
+ 
   NavigatorUtil.navigation=props.navigation;
-  const Tab=createAppContainer(_tabNavigator());
   return (
-    <Tab />
+    <DyNamicTabNavigator />
   );
 };
 

@@ -8,22 +8,32 @@ import NavigatorUtil from '../navigator/NavigatorUtil'
 import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 const PopularPage: () => React$Node = () => {
-  const TabNavigator=createAppContainer(createMaterialTopTabNavigator({
-    TabNavigator1:{
-      screen:TopNavigator,
-      navigationOptions:{
-        title:'Tab1'
+  const TabNames=['Android','ios','React','Vue','React Native'];
+  function _GetTabs(){
+    const tabs={}
+    TabNames.forEach((item,index)=>{
+      tabs[`tab${index}`]={
+        screen:props=><TopNavigator {...props} tabLabel={item}/>,
+        navigationOptions:{
+          title:item
+        }
       }
-    },
-    TabNavigator2:{
-      screen:TopNavigator,
-      navigationOptions:{
-        title:'Tab2'
+    })
+    return tabs
+  }
+  const TabNavigator=createAppContainer(createMaterialTopTabNavigator(
+    _GetTabs(),{
+      tabBarOptions:{
+        tabStyle:styles.tabStyle,
+        scrollEnabled:true,
+        upperCaseLabel:false,
+        indicatorStyle:styles.indicatorStyle,
+        labelStyle:styles.labelStyle
       }
     }
-  }))
+  ))
   return (
-    <View style={{flex:1,marginTop:30}}>
+    <View style={{flex:1,marginTop:0}}>
         <TabNavigator></TabNavigator>
     </View>
   );
@@ -43,6 +53,15 @@ const styles = StyleSheet.create({
       justifyContent:'center',
       backgroundColor:'#f5fcff',
       alignItems:'center'
+  },
+  tabStyle:{
+    minWidth:40
+  },
+  indicatorStyle:{
+    backgroundColor:'#fff'
+  },
+  labelStyle:{
+    fontSize:13
   }
 });
 

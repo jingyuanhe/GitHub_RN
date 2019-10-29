@@ -3,12 +3,18 @@ import {
   StyleSheet,
   View,
   Text,
+  Button
 } from 'react-native';
 
-const FavoritePage: () => React$Node = () => {
+const FavoritePage: () => React$Node = (props) => {
   return (
     <View style={styles.container}>
         <Text style={styles.welcome}>FavoritePage</Text>
+        <Button 
+          title='改变主题颜色'
+          onPress={()=>{
+          props.navigation.setParams({theme:{tintColor: 'blue'}})
+        }}></Button>
     </View>
   );
 };
