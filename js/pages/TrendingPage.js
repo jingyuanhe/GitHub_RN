@@ -5,6 +5,8 @@ import {
   Text,
   Button
 } from 'react-native';
+import { connect } from 'react-redux';
+import actions from "../action/index";
 
 const TrendingPage: () => React$Node = (props) => {
   return (
@@ -13,7 +15,7 @@ const TrendingPage: () => React$Node = (props) => {
         <Button 
           title='改变主题颜色'
           onPress={()=>{
-          props.navigation.setParams({theme:{tintColor: 'red'}})
+            props.onThemeChange('#f00')
         }}></Button>
     </View>
   );
@@ -27,5 +29,7 @@ const styles = StyleSheet.create({
       alignItems:'center'
   }
 });
-
-export default TrendingPage;
+const mapActionToProps=dispatch=>({
+  onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
+})
+export default connect(null,mapActionToProps)(TrendingPage);

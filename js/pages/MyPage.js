@@ -5,15 +5,16 @@ import {
   Text,
   Button
 } from 'react-native';
-
-const MyPage: () => React$Node = () => {
+import actions from "../action/index";
+import {connect} from "react-redux";
+const MyPage: () => React$Node = (props) => {
   return (
     <View style={styles.container}>
         <Text style={styles.welcome}>MyPage</Text>
         <Button 
           title='改变主题颜色'
           onPress={()=>{
-          props.navigation.setParams({theme:{tintColor: 'green'}})
+            props.onThemeChange('#0f0')
         }}></Button>
     </View>
   );
@@ -27,5 +28,7 @@ const styles = StyleSheet.create({
       alignItems:'center'
   }
 });
-
-export default MyPage;
+const mapActionToProps=dispatch=>({
+  onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
+})
+export default connect(null,mapActionToProps)(MyPage);

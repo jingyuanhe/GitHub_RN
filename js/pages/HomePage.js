@@ -1,22 +1,31 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
 } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import PopularPage from "./PopularPage";
-import TrendingPage from "./TrendingPage";
-import FavoritePage from "./FavoritePage";
-import MyPage from "./MyPage";
-import TrendingIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import AntDesign from "react-native-vector-icons/AntDesign";
 import NavigatorUtil from '../navigator/NavigatorUtil'
 import DyNamicTabNavigator from "../navigator/DyNamicTabNavigator";
+import {BackHandler} from "react-native";
+import {NavigationActions} from "react-navigation";
+import {connect} from 'react-redux';
 const HomePage: () => React$Node = (props) => {
- 
+  useEffect(() => {
+    onBackPress = () => {
+      const {dispatch, nav} = props;
+      //if (nav.index === 0) {
+      if (nav.routes[1].index === 0) {//如果RootNavigator中的MainNavigator的index为0，则不处理返回事件
+          return false;
+      }
+      dispatch(NavigationActions.back());
+      return true;
+  };
+
+    BackHandler.addEventListener("hardwareBackPress",onBackPress);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress",onBackPress);
+    };
+  });
   NavigatorUtil.navigation=props.navigation;
   return (
     <DyNamicTabNavigator />
@@ -32,4 +41,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HomePage;
+const mapStateToProps = state => ({
+  nav: state.nav,
+});
+
+export default connect(mapStateToProps)(HomePage);
