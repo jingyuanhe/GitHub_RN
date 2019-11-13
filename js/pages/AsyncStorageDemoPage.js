@@ -20,15 +20,16 @@ const AsyncStorageDemoPage: () => React$Node = () => {
     }
     async function getData(){
       try{
-        await setText(AsyncStorage.getItem(KEY));
+        const saveValue=await AsyncStorage.getItem(KEY);
+        setText(saveValue);
       }catch(err){
         alert(err)
       }
     }
     async function delData(){
       try{
-        await AsyncStorage.
-        await setText(AsyncStorage.getItem(KEY));
+        await AsyncStorage.removeItem(KEY);
+        setText('')
       }catch(err){
         alert(err)
       }
