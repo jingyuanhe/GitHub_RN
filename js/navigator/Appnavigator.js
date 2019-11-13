@@ -14,6 +14,8 @@ import {
 import WelcomePage from "../pages/WelcomePage";
 import HomePage from "../pages/HomePage";
 import DetailPage from "../pages/DetailPage";
+import FetchDemoPage from '../pages/FetchDemoPage'
+import AsyncStorageDemoPage from '../pages/AsyncStorageDemoPage'
 import React from 'react';
 export const rootCom = 'Init';//设置根路由
 const InitNavigator=createStackNavigator({
@@ -33,6 +35,18 @@ const MainNavigator=createStackNavigator({
     },
     DetailPage:{
         screen:DetailPage,
+        navigationOptions:{
+            // header:null
+        }
+    },
+    FetchDemoPage:{
+        screen:FetchDemoPage,
+        navigationOptions:{
+            // header:null
+        }
+    },
+    AsyncStorageDemoPage:{
+        screen:AsyncStorageDemoPage,
         navigationOptions:{
             // header:null
         }

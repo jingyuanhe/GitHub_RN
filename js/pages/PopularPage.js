@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Button
 } from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil'
 import { createAppContainer } from 'react-navigation';
@@ -44,6 +45,14 @@ function TopNavigator(props){
     <View style={styles.container}>
       <Text style={styles.welcome}>{tabLabel}</Text>
       <Text onPress={()=>{NavigatorUtil.gotoPage({},'DetailPage')}}>跳转到详情</Text>
+      <Button
+        title='跳转到fetch'
+        onPress={()=>{NavigatorUtil.gotoPage({},'FetchDemoPage')}}
+      />
+       <Button
+        title='跳转到AsyncStorage'
+        onPress={()=>{NavigatorUtil.gotoPage({},'AsyncStorageDemoPage')}}
+      />
     </View>
   )
 }
@@ -56,6 +65,9 @@ const styles = StyleSheet.create({
   },
   tabStyle:{
     minWidth:40
+  },
+  button:{
+    marginTop:30
   },
   indicatorStyle:{
     backgroundColor:'#fff'
