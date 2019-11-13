@@ -6,18 +6,41 @@ import {
   TextInput,
   Button
 } from 'react-native';
-
+import { AsyncStorage } from "react-native"
+const KEY='searchValue'
 const AsyncStorageDemoPage: () => React$Node = () => {
     const [showValue,setText]=useState('');
     const [value,setValue]=useState('');
+    async function doSave(){
+      try{
+        await AsyncStorage.setItem(KEY,value)
+      }catch(err){
+        alert(err)
+      }
+    }
+    async function getData(){
+      try{
+        await setText(AsyncStorage.getItem(KEY));
+      }catch(err){
+        alert(err)
+      }
+    }
+    async function delData(){
+      try{
+        await AsyncStorage.
+        await setText(AsyncStorage.getItem(KEY));
+      }catch(err){
+        alert(err)
+      }
+    }
     return (
     <View style={styles.container}>
         <Text style={styles.welcome}>获取AsyncStorage</Text>
         <TextInput style={styles.input} onChangeText={text=>setValue(text)}></TextInput>
         <View style={styles.input_con}>
-           <Text>存储</Text>
-           <Text>获取</Text>
-           <Text>删除</Text>
+           <Text style={styles.text} onPress={()=>doSave()}>存储</Text>
+           <Text style={styles.text} onPress={()=>getData()}>获取</Text>
+           <Text style={styles.text} onPress={()=>delData()}>删除</Text>
         </View>
         <View>
             <Text>{showValue}</Text>
@@ -38,11 +61,16 @@ const styles = StyleSheet.create({
       borderWidth:1,
       marginLeft:30,
       lineHeight:30,
-      paddingTop:5
+      paddingTop:5,
+      width:200,
+      marginBottom:20
   },
   input_con:{
       flexDirection:'row',
       alignItems:'center'
+  },
+  text:{
+    marginLeft:20
   }
 });
 
