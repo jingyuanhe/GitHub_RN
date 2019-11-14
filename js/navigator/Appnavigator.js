@@ -16,6 +16,7 @@ import HomePage from "../pages/HomePage";
 import DetailPage from "../pages/DetailPage";
 import FetchDemoPage from '../pages/FetchDemoPage'
 import AsyncStorageDemoPage from '../pages/AsyncStorageDemoPage'
+import DataStoreDemoPage from "../pages/DataStoreDemoPage";
 import React from 'react';
 export const rootCom = 'Init';//设置根路由
 const InitNavigator=createStackNavigator({
@@ -50,6 +51,9 @@ const MainNavigator=createStackNavigator({
         navigationOptions:{
             // header:null
         }
+    },
+    DataStoreDemoPage:{
+        screen:DataStoreDemoPage
     }
 
 })

@@ -53,6 +53,10 @@ function TopNavigator(props){
         title='跳转到AsyncStorage'
         onPress={()=>{NavigatorUtil.gotoPage({},'AsyncStorageDemoPage')}}
       />
+      <Button
+        title='跳转到DataStoreDemoPage'
+        onPress={()=>{NavigatorUtil.gotoPage({},'DataStoreDemoPage')}}
+      />
     </View>
   )
 }
