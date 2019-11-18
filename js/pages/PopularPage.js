@@ -3,18 +3,25 @@ import {
   StyleSheet,
   View,
   Text,
-  Button
+  Button,
+  FlatList,
+  RefreshControl
 } from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil'
 import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import {connect} from 'react-redux'
+import actions from '../action/index'
+import { useState, useEffect } from 'react';
+const URL='https://api.github.com/search/repositories?q=';
+const QUERY_STR='&sort=stars'
 const PopularPage: () => React$Node = () => {
   const TabNames=['Android','ios','React','Vue','React Native'];
   function _GetTabs(){
     const tabs={}
     TabNames.forEach((item,index)=>{
       tabs[`tab${index}`]={
-        screen:props=><TopNavigator {...props} tabLabel={item}/>,
+        screen:props=><PopularTabPage {...props} tabLabel={item}/>,
         navigationOptions:{
           title:item
         }
@@ -39,27 +46,61 @@ const PopularPage: () => React$Node = () => {
     </View>
   );
 };
+
 function TopNavigator(props){
-  const {tabLabel}=props;
+  const {tabLabel,popular}=props;
+  const storeName=tabLabel;
+  function genFetchUrl(storeName){
+    return URL+storeName+QUERY_STR;
+  }
+  function loadData(){
+    const {onLoadPopularData}=props;
+    const url=genFetchUrl(storeName)
+    onLoadPopularData(storeName,url);
+  }
+  useEffect(() => {
+    loadData();
+  },[]);
+  let store=popular[storeName];
+  if(!store){
+    store={
+      items:[],
+      isLoading:false
+    }
+  }
+  function renderItem(data){
+    const item=data.item;
+    return <View>
+            <Text>{JSON.stringify(item)}</Text>
+          </View>
+  }
   return(
     <View style={styles.container}>
-      <Text style={styles.welcome}>{tabLabel}</Text>
-      <Text onPress={()=>{NavigatorUtil.gotoPage({},'DetailPage')}}>跳转到详情</Text>
-      <Button
-        title='跳转到fetch'
-        onPress={()=>{NavigatorUtil.gotoPage({},'FetchDemoPage')}}
-      />
-       <Button
-        title='跳转到AsyncStorage'
-        onPress={()=>{NavigatorUtil.gotoPage({},'AsyncStorageDemoPage')}}
-      />
-      <Button
-        title='跳转到DataStoreDemoPage'
-        onPress={()=>{NavigatorUtil.gotoPage({},'DataStoreDemoPage')}}
-      />
+      <FlatList
+        data={store.items}
+        renderItem={data=>renderItem(data)}
+        refreshControl={
+          <RefreshControl
+            title='loading'
+            refreshing={store.isLoading}
+            onRefresh={()=>loadData()}
+          >
+
+          </RefreshControl>
+        }
+      >
+
+      </FlatList>
     </View>
   )
 }
+const mapStateToProps=state=>({
+  popular:state.popular
+});
+const mapDispatchToProps=dispatch=>({
+  onLoadPopularData:(storeName,url)=>dispatch(actions.onLoadPopularData(storeName,url))
+})
+const PopularTabPage=connect(mapStateToProps,mapDispatchToProps)(TopNavigator)
 const styles = StyleSheet.create({
   container:{
       flex:1,

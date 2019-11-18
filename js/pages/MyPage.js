@@ -16,6 +16,19 @@ const MyPage: () => React$Node = (props) => {
           onPress={()=>{
             props.onThemeChange('#0f0')
         }}></Button>
+        <Text onPress={()=>{NavigatorUtil.gotoPage({},'DetailPage')}}>跳转到详情</Text>
+      <Button
+        title='跳转到fetch'
+        onPress={()=>{NavigatorUtil.gotoPage({},'FetchDemoPage')}}
+      />
+       <Button
+        title='跳转到AsyncStorage'
+        onPress={()=>{NavigatorUtil.gotoPage({},'AsyncStorageDemoPage')}}
+      />
+      <Button
+        title='跳转到DataStoreDemoPage'
+        onPress={()=>{NavigatorUtil.gotoPage({},'DataStoreDemoPage')}}
+      />
     </View>
   );
 };
