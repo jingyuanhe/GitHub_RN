@@ -13,6 +13,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import {connect} from 'react-redux'
 import actions from '../action/index'
 import { useState, useEffect } from 'react';
+import PopularItem from "../common/PopularItem";
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
 const PopularPage: () => React$Node = () => {
@@ -55,7 +56,7 @@ function TopNavigator(props){
   }
   function loadData(){
     const {onLoadPopularData}=props;
-    const url=genFetchUrl(storeName)
+    const url=genFetchUrl(storeName);
     onLoadPopularData(storeName,url);
   }
   useEffect(() => {
@@ -70,9 +71,7 @@ function TopNavigator(props){
   }
   function renderItem(data){
     const item=data.item;
-    return <View>
-            <Text>{JSON.stringify(item)}</Text>
-          </View>
+    return <PopularItem item={item} onSelect={()=>{}}></PopularItem>
   }
   return(
     <View style={styles.container}>
