@@ -8,6 +8,7 @@ import {
   RefreshControl
 } from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil'
+import NavigationBar from "../common/NavigationBar";
 import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import {connect} from 'react-redux'
@@ -16,6 +17,7 @@ import { useState, useEffect } from 'react';
 import PopularItem from "../common/PopularItem";
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
+const THEME_COLOR='#678'
 const PopularPage: () => React$Node = () => {
   const TabNames=['Android','ios','React','Vue','React Native'];
   function _GetTabs(){
@@ -41,8 +43,15 @@ const PopularPage: () => React$Node = () => {
       }
     }
   ))
+  const statusBar={
+    backgroundColor:THEME_COLOR
+  }
+  const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}>
+
+  </NavigationBar>
   return (
     <View style={{flex:1,marginTop:0}}>
+        {navigationBar}
         <TabNavigator></TabNavigator>
     </View>
   );
