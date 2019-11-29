@@ -1,32 +1,80 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  Button
+  Button,
+  TouchableOpacity,
+
 } from 'react-native';
 import { connect } from 'react-redux';
 import actions from "../action/index";
+import NavigationBar from "../common/NavigationBar";
+import TrendingDiaLog,{TimeSpans} from '../common/TrendingDiaLog'
+const THEME_COLOR='#678'
+const statusBar={
+  backgroundColor:THEME_COLOR
+}
+class TrendingPage extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      TimeSpan:TimeSpans[0]
+    }
+  }
+  renderTitleView(){
+    return(
+      <View>
+        <TouchableOpacity
+          underlayColor='transparent'
+          onPress={()=>this.dialog.show()}
+        >
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+            <Text style={{fontSize:18,color:'#fff'}}>
+              趋势 {this.state.TimeSpan.showText}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+  onSelectTimeSpan(tab){
+    this.dialog.dismiss();
+    this.setState({
+      TimeSpan:tab
+    })
+  }
+  renderTrendingDialog(){
+    return <TrendingDiaLog ref={dialog=>this.dialog=dialog}
+              onSelect={tab=>this.onSelectTimeSpan(tab)}
+    ></TrendingDiaLog>
+  }
+  
+  render(){
+    const navigationBar=<NavigationBar titleView={this.renderTitleView()} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+    return (
+      <View style={styles.container}>
+        {navigationBar}
+          {/* <Text style={styles.welcome}>TrendingPage</Text>
+          <Button 
+            title='改变主题颜色'
+            onPress={()=>{
+              props.onThemeChange('#f00')
+          }}></Button> */}
+          {this.renderTrendingDialog()} 
 
-const TrendingPage: () => React$Node = (props) => {
-  return (
-    <View style={styles.container}>
-        <Text style={styles.welcome}>TrendingPage</Text>
-        <Button 
-          title='改变主题颜色'
-          onPress={()=>{
-            props.onThemeChange('#f00')
-        }}></Button>
-    </View>
-  );
+        
+      </View>
+    );
+  }
+ 
 };
 
 const styles = StyleSheet.create({
   container:{
-      flex:1,
-      justifyContent:'center',
+      //justifyContent:'center',
       backgroundColor:'#f5fcff',
-      alignItems:'center'
+      //alignItems:'center'
   }
 });
 const mapActionToProps=dispatch=>({

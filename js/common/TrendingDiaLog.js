@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Modal,TouchableOpacity,StyleSheet,View } from "react-native";\
+import {Modal,TouchableOpacity,StyleSheet,View,Text } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import TimeSpan from "../model/TimeSpan";
 export const TimeSpans=[new TimeSpan('今 天','since=dayly'),new TimeSpan('本 周','since=weekly'),new TimeSpan('本 月','since=monthly')]
@@ -7,7 +7,7 @@ export default class TrendingDiaLog extends Component{
     constructor(props){
         super(props);
         this.state={
-            visible:false
+            visible:true
         }
     }
     show(){
@@ -22,10 +22,11 @@ export default class TrendingDiaLog extends Component{
     }
     render(){
         const {onSelect,onClose}=this.props;
+       
         return(
             <Modal
                 transparent={true}
-                visible={this.props.visible}
+                visible={this.state.visible}
                 onRequestClose={()=>onClose}
             >
                 <TouchableOpacity
@@ -38,19 +39,19 @@ export default class TrendingDiaLog extends Component{
                         style={styles.arrow}
                     >
                         <View style={styles.content}>
-                            {TimeSpans.map((result,i,arr))=>{
+                            {TimeSpans.map((result,i,arr)=>{
                                 return <TouchableOpacity
                                     onPress={()=>onSelect(arr[i])}
                                     underlayColor='transparent'
                                 >
                                     <View style={styles.text_container}>
-                                        <Text style={styles.text}>{arr[i].showText}</Text>
+                                        {/* <Text style={styles.text}>{arr[i].showText}</Text>
                                         {
                                             i!==TimeSpans.length-1?<View style={styles.line}></View>:null
-                                        }
+                                        } */}
                                     </View>
                                 </TouchableOpacity>
-                            }}
+                            })}
                         </View>
                     </MaterialIcons>
                 </TouchableOpacity>
@@ -61,7 +62,7 @@ export default class TrendingDiaLog extends Component{
 const styles=StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:rgba(0,0,0,.6),
+        backgroundColor:'rgba(0,0,0,.6)',
         alignItems:'center'
     },
     arrow:{
@@ -91,6 +92,6 @@ const styles=StyleSheet.create({
     },
     line:{
         height:.3,
-        backgroundColor:'darkgrav'
+        backgroundColor:'#ddd'
     }
 })
