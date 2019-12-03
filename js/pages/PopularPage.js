@@ -18,6 +18,7 @@ import PopularItem from "../common/PopularItem";
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
 const THEME_COLOR='#678'
+const pageSize=10;
 const PopularPage: () => React$Node = () => {
   const TabNames=['Android','ios','React','Vue','React Native'];
   function _GetTabs(){
@@ -63,10 +64,15 @@ function TopNavigator(props){
   function genFetchUrl(storeName){
     return URL+storeName+QUERY_STR;
   }
-  function loadData(){
-    const {onLoadPopularData}=props;
+  function loadData(loadMore){
+    const {onLoadPopularData,onLoadMorePopular}=props;
+    if(loadMore){
+      onLoadMorePopular(storeName)
+    }else{
+      onLoadPopularData(storeName,url);
+    }
     const url=genFetchUrl(storeName);
-    onLoadPopularData(storeName,url);
+   
   }
   useEffect(() => {
     loadData();
@@ -75,7 +81,9 @@ function TopNavigator(props){
   if(!store){
     store={
       items:[],
-      isLoading:false
+      isLoading:false,
+      projectModes:[],
+      hideLoadingMore:true
     }
   }
   function renderItem(data){
@@ -106,7 +114,8 @@ const mapStateToProps=state=>({
   popular:state.popular
 });
 const mapDispatchToProps=dispatch=>({
-  onLoadPopularData:(storeName,url)=>dispatch(actions.onLoadPopularData(storeName,url))
+  onLoadPopularData:(storeName,url,pageSize)=>dispatch(actions.onLoadPopularData(storeName,url,pageSize)),
+  onLoadMorePopular:(storeName,pageIndex,pageSize,items,callBack)=>dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,callBack))
 })
 const PopularTabPage=connect(mapStateToProps,mapDispatchToProps)(TopNavigator)
 const styles = StyleSheet.create({

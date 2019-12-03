@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import actions from "../action/index";
 import NavigationBar from "../common/NavigationBar";
 import TrendingDiaLog,{TimeSpans} from '../common/TrendingDiaLog'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 const THEME_COLOR='#678'
 const statusBar={
   backgroundColor:THEME_COLOR
@@ -33,6 +34,13 @@ class TrendingPage extends Component{
             <Text style={{fontSize:18,color:'#fff'}}>
               趋势 {this.state.TimeSpan.showText}
             </Text>
+            <MaterialIcons
+              name={'arrow-drop-down'}
+              size={22}
+              style={{color:'white'}}
+            >
+
+            </MaterialIcons>
           </View>
         </TouchableOpacity>
       </View>

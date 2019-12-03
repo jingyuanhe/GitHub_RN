@@ -7,7 +7,7 @@ export default class TrendingDiaLog extends Component{
     constructor(props){
         super(props);
         this.state={
-            visible:true
+            visible:false
         }
     }
     show(){
@@ -38,6 +38,7 @@ export default class TrendingDiaLog extends Component{
                         size={36}
                         style={styles.arrow}
                     >
+                        </MaterialIcons>
                         <View style={styles.content}>
                             {TimeSpans.map((result,i,arr)=>{
                                 return <TouchableOpacity
@@ -45,15 +46,15 @@ export default class TrendingDiaLog extends Component{
                                     underlayColor='transparent'
                                 >
                                     <View style={styles.text_container}>
-                                        {/* <Text style={styles.text}>{arr[i].showText}</Text>
-                                        {
-                                            i!==TimeSpans.length-1?<View style={styles.line}></View>:null
-                                        } */}
+                                        <Text style={styles.text}>{arr[i].showText}</Text>
                                     </View>
+                                    {
+                                            i!==TimeSpans.length-1?<View style={styles.line}></View>:null
+                                    }
                                 </TouchableOpacity>
                             })}
                         </View>
-                    </MaterialIcons>
+                    
                 </TouchableOpacity>
             </Modal>
         )
