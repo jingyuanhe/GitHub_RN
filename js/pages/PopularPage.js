@@ -116,16 +116,18 @@ function TopNavigator(props){
         }
         ListFooterComponent={()=>genIndicator()}
         onEndReached={()=>{
+         
           setTimeout(()=>{
             if(canLoadMore){
-              loadData(true)
               canLoadMore=false;
+              loadData(true)
+              
             }
-          },100)
+          },200)
           
           
         }}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.8}
         onMomentumScrollBegin={()=>{
           canLoadMore=true;
         }}
