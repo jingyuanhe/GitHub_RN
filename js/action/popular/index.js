@@ -26,7 +26,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],call
                 dispatch({
                     type:types.POPULAR_LOAD_MORE_FAIL,
                     error:'no more',
-                    storeName:storeName
+                    storeName:storeName,
                     pageIndex:--pageIndex,
                     projectModes:dataArray
                 })

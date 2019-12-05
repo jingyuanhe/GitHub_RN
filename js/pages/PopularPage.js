@@ -61,22 +61,6 @@ const PopularPage: () => React$Node = () => {
 function TopNavigator(props){
   const {tabLabel,popular}=props;
   const storeName=tabLabel;
-  function genFetchUrl(storeName){
-    return URL+storeName+QUERY_STR;
-  }
-  function loadData(loadMore){
-    const {onLoadPopularData,onLoadMorePopular}=props;
-    if(loadMore){
-      onLoadMorePopular(storeName)
-    }else{
-      onLoadPopularData(storeName,url);
-    }
-    const url=genFetchUrl(storeName);
-   
-  }
-  useEffect(() => {
-    loadData();
-  },[]);
   let store=popular[storeName];
   if(!store){
     store={
@@ -85,6 +69,23 @@ function TopNavigator(props){
       projectModes:[],
       hideLoadingMore:true
     }
+  function genFetchUrl(storeName){
+    return URL+storeName+QUERY_STR;
+  }
+  function loadData(loadMore){
+    const {onLoadPopularData,onLoadMorePopular}=props;
+    if(loadMore){
+      onLoadMorePopular(storeName)
+    }else{
+      onLoadPopularData(storeName,url,pageSize);
+    }
+    const url=genFetchUrl(storeName);
+   
+  }
+  useEffect(() => {
+    loadData();
+  },[]);
+  
   }
   function renderItem(data){
     const item=data.item;
