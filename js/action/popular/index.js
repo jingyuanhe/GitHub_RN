@@ -19,7 +19,7 @@ export function onLoadPopularData(storeName,url,pageSize){
 export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],callBack){
     return dispatch=>{
         setTimeout(function(){
-            if((pageIndex-1)*pageSize>dataArray.length){
+            if((pageIndex-1)*pageSize>=dataArray.length){
                 if(typeof callBack=='function'){
                     callBack('no more')
                 }
@@ -47,9 +47,11 @@ function handleData(dispatch,storeName,data,pageSize){
     if(data&&data.data&&data.data.items){
         fixItems=data.data.items
     }
+   
     dispatch({
         type:types.POPULAR_REFRESH_SUCCESS,
-        projectModes:pageSize>fixItems.length>fixItems:fixItems.slice(0,pageSize),
+        items:fixItems,
+        projectModes:pageSize>fixItems.length?fixItems:fixItems.slice(0,pageSize),
         storeName,
         pageIndex:1
     })

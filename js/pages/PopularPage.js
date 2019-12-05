@@ -5,6 +5,7 @@ import {
   Text,
   Button,
   FlatList,
+  ActivityIndicator,
   RefreshControl
 } from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil'
@@ -62,6 +63,7 @@ function TopNavigator(props){
   const {tabLabel,popular}=props;
   const storeName=tabLabel;
   let store=popular[storeName];
+  let canLoadMore=true;
   if(!store){
     store={
       items:[],
@@ -69,33 +71,40 @@ function TopNavigator(props){
       projectModes:[],
       hideLoadingMore:true
     }
+  }
   function genFetchUrl(storeName){
     return URL+storeName+QUERY_STR;
   }
   function loadData(loadMore){
     const {onLoadPopularData,onLoadMorePopular}=props;
+    const url=genFetchUrl(storeName);
     if(loadMore){
-      onLoadMorePopular(storeName)
+      onLoadMorePopular(storeName,++store.pageIndex,pageSize,store.items,callBack=>{alert('没有更多')})
     }else{
       onLoadPopularData(storeName,url,pageSize);
     }
-    const url=genFetchUrl(storeName);
+    
    
   }
   useEffect(() => {
     loadData();
   },[]);
-  
-  }
   function renderItem(data){
     const item=data.item;
     return <PopularItem item={item} onSelect={()=>{}}></PopularItem>
   }
+  function genIndicator(){
+    return store.hideLoadingMore?null:<View style={{alignItems:'center'}}>
+      <ActivityIndicator style={{color:'red',margin:10}}></ActivityIndicator>
+      <Text>正在加载更多</Text>
+    </View>
+  }
   return(
     <View style={styles.container}>
       <FlatList
-        data={store.items}
+        data={store.projectModes}
         renderItem={data=>renderItem(data)}
+        keyExtractor={item=>""+item.id}
         refreshControl={
           <RefreshControl
             title='loading'
@@ -105,6 +114,21 @@ function TopNavigator(props){
 
           </RefreshControl>
         }
+        ListFooterComponent={()=>genIndicator()}
+        onEndReached={()=>{
+          setTimeout(()=>{
+            if(canLoadMore){
+              loadData(true)
+              canLoadMore=false;
+            }
+          },100)
+          
+          
+        }}
+        onEndReachedThreshold={0.5}
+        onMomentumScrollBegin={()=>{
+          canLoadMore=true;
+        }}
       >
 
       </FlatList>
