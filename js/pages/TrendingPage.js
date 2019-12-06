@@ -4,8 +4,7 @@ import {
   View,
   Text,
   Button,
-  TouchableOpacity,
-
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
 import actions from "../action/index";
@@ -39,7 +38,6 @@ class TrendingPage extends Component{
               size={22}
               style={{color:'white'}}
             >
-
             </MaterialIcons>
           </View>
         </TouchableOpacity>
@@ -57,32 +55,19 @@ class TrendingPage extends Component{
               onSelect={tab=>this.onSelectTimeSpan(tab)}
     ></TrendingDiaLog>
   }
-  
   render(){
     const navigationBar=<NavigationBar titleView={this.renderTitleView()} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
     return (
       <View style={styles.container}>
         {navigationBar}
-          {/* <Text style={styles.welcome}>TrendingPage</Text>
-          <Button 
-            title='改变主题颜色'
-            onPress={()=>{
-              props.onThemeChange('#f00')
-          }}></Button> */}
-          {this.renderTrendingDialog()} 
-
-        
+        {this.renderTrendingDialog()} 
       </View>
     );
   }
- 
 };
-
 const styles = StyleSheet.create({
   container:{
-      //justifyContent:'center',
-      backgroundColor:'#f5fcff',
-      //alignItems:'center'
+      backgroundColor:'#f5fcff'
   }
 });
 const mapActionToProps=dispatch=>({
