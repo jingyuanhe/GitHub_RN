@@ -111,28 +111,23 @@ function TopNavigator(props){
             refreshing={store.isLoading}
             onRefresh={()=>loadData()}
           >
-
           </RefreshControl>
         }
         ListFooterComponent={()=>genIndicator()}
         onEndReached={()=>{
-         
           setTimeout(()=>{
-            if(canLoadMore){
-              canLoadMore=false;
+            if(!canLoadMore){
+              canLoadMore=true;
               loadData(true)
               
             }
           },200)
-          
-          
         }}
-        onEndReachedThreshold={0.8}
+        onEndReachedThreshold={0.2}
         onMomentumScrollBegin={()=>{
-          canLoadMore=true;
+          canLoadMore=false;
         }}
       >
-
       </FlatList>
     </View>
   )
