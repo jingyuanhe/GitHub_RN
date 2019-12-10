@@ -58,7 +58,6 @@ const PopularPage: () => React$Node = () => {
     </View>
   );
 };
-
 function TopNavigator(props){
   const {tabLabel,popular}=props;
   const storeName=tabLabel;
@@ -79,7 +78,7 @@ function TopNavigator(props){
     const {onLoadPopularData,onLoadMorePopular}=props;
     const url=genFetchUrl(storeName);
     if(loadMore){
-      onLoadMorePopular(storeName,++store.pageIndex,pageSize,store.items,callBack=>{alert('没有更多')})
+      onLoadMorePopular(storeName,++store.pageIndex,pageSize,store.items,callBack=>{alert('已经加载到底部了。。。')})
     }else{
       onLoadPopularData(storeName,url,pageSize);
     }

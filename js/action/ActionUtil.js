@@ -1,13 +1,12 @@
 export function handleData(actionType,dispatch,storeName,data,pageSize){
     let fixItems=[];
-    if(data&&data.data&&data.data.items){
-        if(Array.isArray(data.data)){
-            fixItems=data.data
+    if(data){
+        if(Array.isArray(data)){
+            fixItems=data;
         }else if(Array.isArray(data.data.items)){
             fixItems=data.data.items
         }
     }
-   
     dispatch({
         type:actionType,
         items:fixItems,
