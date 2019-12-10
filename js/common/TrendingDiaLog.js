@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {Modal,TouchableOpacity,StyleSheet,View,Text } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import TimeSpan from "../model/TimeSpan";
-export const TimeSpans=[new TimeSpan('今 天','since=dayly'),new TimeSpan('本 周','since=weekly'),new TimeSpan('本 月','since=monthly')]
+export const TimeSpans=[new TimeSpan('今 天','since=daily'),new TimeSpan('本 周','since=weekly'),new TimeSpan('本 月','since=monthly')]
 export default class TrendingDiaLog extends Component{
     constructor(props){
         super(props);
@@ -44,6 +44,7 @@ export default class TrendingDiaLog extends Component{
                                 return <TouchableOpacity
                                     onPress={()=>onSelect(arr[i])}
                                     underlayColor='transparent'
+                                    key={i}
                                 >
                                     <View style={styles.text_container}>
                                         <Text style={styles.text}>{arr[i].showText}</Text>

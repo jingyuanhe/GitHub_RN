@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native"
+import AsyncStorage from '@react-native-community/async-storage';
 import Trending from 'GitHubTrending'
 export const FLAG_STORAGE={flag_popular:'popular',flag_trending:'trending'}
 export default class DataStore{
@@ -49,14 +49,14 @@ export default class DataStore{
     }
     saveData(url,data,callback){
         if(!url||!data) return;
-        AsyncStorage.setItem(url,JSON.stringify(this._wrapData(data)),callback);
+        AsyncStorage.setItem(JSON.stringify(url),JSON.stringify(this._wrapData(data)),callback);
     }
     _wrapData(data){
         return {data:data,timestamp:new Date().getTime()}
     }
     fetchLocalData(url){
         return new Promise((resolve,reject)=>{
-            AsyncStorage.getItem(url,(error,result)=>{
+            AsyncStorage.getItem(JSON.stringify(url),(error,result)=>{
                 if(!error){
                     try{
                         resolve(JSON.parse(result))

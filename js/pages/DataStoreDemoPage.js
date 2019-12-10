@@ -6,7 +6,7 @@ import {
   TextInput,
   Button
 } from 'react-native';
-import { AsyncStorage } from "react-native"
+import AsyncStorage from '@react-native-community/async-storage';
 import DataStore from "../expand/dao/DataStore";
 const getData=new DataStore();
 const DataStoreDemoPage: () => React$Node = () => {
