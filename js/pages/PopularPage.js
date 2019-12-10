@@ -83,8 +83,6 @@ function TopNavigator(props){
     }else{
       onLoadPopularData(storeName,url,pageSize);
     }
-    
-   
   }
   useEffect(() => {
     loadData();
