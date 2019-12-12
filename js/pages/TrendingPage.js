@@ -163,7 +163,9 @@ class TrendingTab extends Component{
   }
   renderItem(data){
     const item=data.item;
-    return <TrendingItem item={item} onSelect={()=>{}}></TrendingItem>
+    return <TrendingItem item={item} onSelect={()=>{
+      NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
+    }}></TrendingItem>
   }
   genIndicator(){
     return this._store().hideLoadingMore?null:<View style={{alignItems:'center'}}>

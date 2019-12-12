@@ -88,7 +88,9 @@ function TopNavigator(props){
   },[]);
   function renderItem(data){
     const item=data.item;
-    return <PopularItem item={item} onSelect={()=>{}}></PopularItem>
+    return <PopularItem item={item} onSelect={()=>{
+      NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
+    }}></PopularItem>
   }
   function genIndicator(){
     return store.hideLoadingMore?null:<View style={{alignItems:'center'}}>

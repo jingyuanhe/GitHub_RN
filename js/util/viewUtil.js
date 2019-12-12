@@ -1,3 +1,4 @@
+import React from 'react'
 import {TouchableOpacity} from 'react-native';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from 'react-native-vector-icons/Ionicons'
