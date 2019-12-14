@@ -40,7 +40,9 @@ export default class favoriteDao{
                     try{
                         resolve(JSON.parse(result))
                     }
-                    catch(error=>reject(error))
+                    catch(error){
+                        reject(error)
+                    }
                 }else{
                     reject(error)
                 }
@@ -66,13 +68,15 @@ export default class favoriteDao{
                             })
                             resolve(items);
                         }
-                        catch(error=>reject(error))
+                        catch(error){
+                            reject(error)
+                        }
                     })
                 }else{
                     resolve(items)
                 }
             })
-            .catch(error=>reject(error))
+            .catch(err=>reject(err))
         })
     }
 }

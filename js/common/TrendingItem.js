@@ -2,18 +2,16 @@ import React from 'react';
 import {TouchableOpacity,View,Text,Image,StyleSheet  } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HTMLView from 'react-native-htmlview';
-const TrendingItem:() => React$Node = (props) =>{
-    const {item}=props;
+import BaseItem from './BaseItem'
+export default class TrendingItem extends BaseItem{
+    render(){
+        const {projectModel}=this.props;
+        const item=projectModel;
     if(!item) return null;
-    let favoriterButton=<TouchableOpacity onPress={()=>{}} style={{padding:4}}>
-        <FontAwesome name={'star-o'} size={26} style={{color:'red'}}>
-
-        </FontAwesome>
-    </TouchableOpacity>
     const description=`<p>${item.description}</p>`
     return(
         <TouchableOpacity
-            onPress={props.onSelect}
+            onPress={this.props.onSelect}
         >
             <View style={styles.cell_container}>
                 <Text style={styles.title}>{item.fullName}</Text>
@@ -38,12 +36,13 @@ const TrendingItem:() => React$Node = (props) =>{
                             }                        
                             
                         </View>
-                        {favoriterButton}
+                        {this._favoriteIcon()}
                     </View>
                 </View>
             </View>
         </TouchableOpacity>
     )
+    }
 }
 const styles=StyleSheet.create({
     row:{
@@ -77,4 +76,3 @@ const styles=StyleSheet.create({
         color:'#757575'
     }
 })
-export default TrendingItem

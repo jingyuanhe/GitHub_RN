@@ -1,4 +1,4 @@
-import react,{Component} from 'react'
+import React,{Component} from 'react'
 import PropTypes from 'prop-types';
 import {TouchableOpacity} from 'react-native'
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -14,14 +14,23 @@ export default class BaseItem extends Component{
             isFavorite:this.props.projectModel.isFavorite
         }
     }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        const isFavorite=nextProps.projectModel.isFavorite;
+        if(isFavorite!==prevState.isFavorite){
+            return{
+                isFavorite:isFavorite
+            }
+        }
+        return null;
+    }
     setFavoriteState(isFavorite){
         this.props.projectModel.isFavorite=isFavorite;
         this.setState({
-            isFavorite:!this.state.isFavorite
+            isFavorite:isFavorite
         })
     }
     onPressFavorite(){
-        this.setFavoriteState(this.state.isFavorite)
+        this.setFavoriteState(!this.state.isFavorite)
         this.props.onFavorite(this.props.projectModel.item,!this.state.isFavorite)
     }
     _favoriteIcon(){

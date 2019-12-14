@@ -163,7 +163,7 @@ class TrendingTab extends Component{
   }
   renderItem(data){
     const item=data.item;
-    return <TrendingItem item={item} onSelect={()=>{
+    return <TrendingItem projectModel={item} onSelect={()=>{
       NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
     }}></TrendingItem>
   }

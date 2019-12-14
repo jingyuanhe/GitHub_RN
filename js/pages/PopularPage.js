@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -20,11 +20,16 @@ const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
 const THEME_COLOR='#678'
 const pageSize=10;
-const PopularPage: () => React$Node = () => {
-  const TabNames=['Android','ios','React','Vue','React Native'];
-  function _GetTabs(){
+
+import Toast, {DURATION} from 'react-native-easy-toast'
+export default class PopularPage extends Component{
+  constructor(props){
+    super(props);
+    this.tabNames=['Android','ios','React','Vue','React Native'];
+  }
+  _GetTabs(){
     const tabs={}
-    TabNames.forEach((item,index)=>{
+    this.tabNames.forEach((item,index)=>{
       tabs[`tab${index}`]={
         screen:props=><PopularTabPage {...props} tabLabel={item}/>,
         navigationOptions:{
@@ -34,102 +39,110 @@ const PopularPage: () => React$Node = () => {
     })
     return tabs
   }
-  const TabNavigator=createAppContainer(createMaterialTopTabNavigator(
-    _GetTabs(),{
-      tabBarOptions:{
-        tabStyle:styles.tabStyle,
-        scrollEnabled:true,
-        upperCaseLabel:false,
-        indicatorStyle:styles.indicatorStyle,
-        labelStyle:styles.labelStyle
+  render(){
+    const TabNavigator=createAppContainer(createMaterialTopTabNavigator(
+      this._GetTabs(),{
+        tabBarOptions:{
+          tabStyle:styles.tabStyle,
+          scrollEnabled:true,
+          upperCaseLabel:false,
+          indicatorStyle:styles.indicatorStyle,
+          labelStyle:styles.labelStyle
+        }
+      }
+    ))
+    const statusBar={
+      backgroundColor:THEME_COLOR
+    }
+    const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+    return (
+      <View style={{flex:1,marginTop:0}}>
+          {navigationBar}
+          <TabNavigator></TabNavigator>
+      </View>
+    );
+  }
+}
+class TopNavigator extends Component{
+  constructor(props){
+    super(props);
+    const {tabLabel}=this.props;
+    this.storeName=tabLabel;
+  }
+  _store(){
+    const {popular}=this.props;
+    let store=popular[this.storeName];
+    if(!store){
+      store={
+        items:[],
+        isLoading:false,
+        projectModes:[],
+        hideLoadingMore:true
       }
     }
-  ))
-  const statusBar={
-    backgroundColor:THEME_COLOR
+    return store
   }
-  const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}>
-
-  </NavigationBar>
-  return (
-    <View style={{flex:1,marginTop:0}}>
-        {navigationBar}
-        <TabNavigator></TabNavigator>
-    </View>
-  );
-};
-function TopNavigator(props){
-  const {tabLabel,popular}=props;
-  const storeName=tabLabel;
-  let store=popular[storeName];
-  let canLoadMore=true;
-  if(!store){
-    store={
-      items:[],
-      isLoading:false,
-      projectModes:[],
-      hideLoadingMore:true
-    }
-  }
-  function genFetchUrl(storeName){
+  genFetchUrl(storeName){
     return URL+storeName+QUERY_STR;
   }
-  function loadData(loadMore){
-    const {onLoadPopularData,onLoadMorePopular}=props;
-    const url=genFetchUrl(storeName);
+  loadData(loadMore){
+    const {onLoadPopularData,onLoadMorePopular}=this.props;
+    const url=this.genFetchUrl(this.storeName);
     if(loadMore){
-      onLoadMorePopular(storeName,++store.pageIndex,pageSize,store.items,callBack=>{alert('已经加载到底部了。。。')})
+      onLoadMorePopular(this.storeName,++this._store().pageIndex,pageSize,this._store().items,callBack=>{this.refs.toast.show('已经加载到底部了。。。')})
     }else{
-      onLoadPopularData(storeName,url,pageSize);
+      onLoadPopularData(this.storeName,url,pageSize);
     }
   }
-  useEffect(() => {
-    loadData();
-  },[]);
-  function renderItem(data){
+  componentDidMount(){
+    this.loadData();
+  }
+  renderItem(data){
     const item=data.item;
-    return <PopularItem item={item} onSelect={()=>{
+    return <PopularItem projectModel={item} onSelect={()=>{
       NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
     }}></PopularItem>
   }
-  function genIndicator(){
-    return store.hideLoadingMore?null:<View style={{alignItems:'center'}}>
+  genIndicator(){
+    return this._store().hideLoadingMore?null:<View style={{alignItems:'center'}}>
       <ActivityIndicator style={{color:'red',margin:10}}></ActivityIndicator>
       <Text>正在加载更多</Text>
     </View>
   }
-  return(
-    <View style={styles.container}>
-      <FlatList
-        data={store.projectModes}
-        renderItem={data=>renderItem(data)}
-        keyExtractor={item=>""+item.id}
-        refreshControl={
-          <RefreshControl
-            title='loading'
-            refreshing={store.isLoading}
-            onRefresh={()=>loadData()}
-          >
-          </RefreshControl>
-        }
-        ListFooterComponent={()=>genIndicator()}
-        onEndReached={()=>{
-          setTimeout(()=>{
-            if(!canLoadMore){
-              canLoadMore=true;
-              loadData(true)
-              
-            }
-          },200)
-        }}
-        onEndReachedThreshold={0.2}
-        onMomentumScrollBegin={()=>{
-          canLoadMore=false;
-        }}
-      >
-      </FlatList>
-    </View>
-  )
+  render(){
+    return(
+      <View style={styles.container}>
+        <FlatList
+          data={this._store().projectModes}
+          renderItem={data=>this.renderItem(data)}
+          keyExtractor={item=>""+item.id}
+          refreshControl={
+            <RefreshControl
+              title='loading'
+              refreshing={this._store().isLoading}
+              onRefresh={()=>this.loadData()}
+            >
+            </RefreshControl>
+          }
+          ListFooterComponent={()=>this.genIndicator()}
+          onEndReached={()=>{
+            setTimeout(()=>{
+              if(!this.canLoadMore){
+                this.canLoadMore=true;
+                this.loadData(true)
+              }
+            },200)
+          }}
+          onEndReachedThreshold={0.2}
+          onMomentumScrollBegin={()=>{
+            this.canLoadMore=false;
+          }}
+        >
+        </FlatList>
+        <Toast ref={"toast"} position={'center'}/>
+      </View>
+    )
+  }
 }
 const mapStateToProps=state=>({
   popular:state.popular
@@ -160,4 +173,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PopularPage;
