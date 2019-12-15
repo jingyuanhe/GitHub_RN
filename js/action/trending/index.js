@@ -8,7 +8,6 @@ export function onLoadTrendingData(storeName,url,pageSize){
         dataStore.fetchData(url,FLAG_STORAGE.flag_trending)
         .then(data=>handleData(types.TRENDING_REFRESH_SUCCESS,dispatch,storeName,data,pageSize))
         .catch(err=>{
-            console.log(err);
             dispatch({
                 type:types.TRENDING_REFRESH_FAIL,
                 storeName,

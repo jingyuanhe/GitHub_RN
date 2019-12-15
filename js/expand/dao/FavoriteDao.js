@@ -2,7 +2,7 @@ const FAVORITE_KEY_PREFIX='favorite_'
 import AsyncStorage from '@react-native-community/async-storage';
 export default class favoriteDao{
     constructor(flag){
-        this.favoriteKey=FAVORITE_KEY_PREFIX+flag
+        this.favoriteKey=FAVORITE_KEY_PREFIX+flag;
     }
     saveFavoriteItem(key,value,callback){
         AsyncStorage.setItem(key,value,(error,result)=>{
@@ -29,7 +29,9 @@ export default class favoriteDao{
                         favoriteKeys.splice(index,1)
                     }
                 }
+                
                 AsyncStorage.setItem(this.favoriteKey,JSON.stringify(favoriteKeys))
+               
             }
         })
     }

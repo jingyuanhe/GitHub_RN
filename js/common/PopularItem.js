@@ -4,7 +4,7 @@ import BaseItem from './BaseItem'
 export default class PopularItem extends BaseItem{
     render(){
     const {projectModel}=this.props;
-    const item=projectModel;
+    const item=projectModel.item;
     if(!item||!item.owner) return null;
     return(
         <TouchableOpacity

@@ -1,5 +1,4 @@
 import ProjectModes from '../model/ProjectModel'
-import favoriteDao from '../expand/dao/FavoriteDao'
 import Utils from '../util/Utils'
 export function handleData(actionType,dispatch,storeName,data,pageSize,favoriteDao){
     let fixItems=[];
@@ -11,11 +10,11 @@ export function handleData(actionType,dispatch,storeName,data,pageSize,favoriteD
         }
     }
     let showItems=pageSize>fixItems.length?fixItems:fixItems.slice(0,pageSize);
-    _projectModels(showItems,favoriteDao,projectModels=>{
+    _projectModels(showItems,favoriteDao,projectModes=>{
         dispatch({
             type:actionType,
             items:fixItems,
-            projectModes:projectModels,
+            projectModes:projectModes,
             storeName,
             pageIndex:1
         })
@@ -25,7 +24,7 @@ export function handleData(actionType,dispatch,storeName,data,pageSize,favoriteD
 export async function _projectModels(showItems,favoriteDao,callback){
     let keys=[];
     try{
-       keys=favoriteDao.getFavoriteKeys();
+       keys=await favoriteDao.getFavoriteKeys();
     }
     catch(e){
         console.log(e)
@@ -34,7 +33,7 @@ export async function _projectModels(showItems,favoriteDao,callback){
     for(let i=0,len=showItems.length;i<len;i++){
         projectModels.push(new ProjectModes(showItems[i],Utils.checkFavorite(showItems[i],keys)))
     }
-    if(callback==='function'){
+    if(typeof callback==='function'){
         callback(projectModels)
     }
 }

@@ -14,14 +14,16 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import {connect} from 'react-redux'
 import actions from '../action/index'
-import { useState, useEffect } from 'react';
 import PopularItem from "../common/PopularItem";
+import FavoriteDao from "../expand/dao/FavoriteDao";
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
 const THEME_COLOR='#678'
 const pageSize=10;
-
+import {FLAG_STORAGE} from "../expand/dao/DataStore";
+const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_popular)
 import Toast, {DURATION} from 'react-native-easy-toast'
+import FavoriteUtil from "../util/FavoriteUtil";
 export default class PopularPage extends Component{
   constructor(props){
     super(props);
@@ -89,9 +91,9 @@ class TopNavigator extends Component{
     const {onLoadPopularData,onLoadMorePopular}=this.props;
     const url=this.genFetchUrl(this.storeName);
     if(loadMore){
-      onLoadMorePopular(this.storeName,++this._store().pageIndex,pageSize,this._store().items,callBack=>{this.refs.toast.show('已经加载到底部了。。。')})
+      onLoadMorePopular(this.storeName,++this._store().pageIndex,pageSize,this._store().items,favoriteDao,callBack=>{this.refs.toast.show('已经加载到底部了。。。')})
     }else{
-      onLoadPopularData(this.storeName,url,pageSize);
+      onLoadPopularData(this.storeName,url,pageSize,favoriteDao);
     }
   }
   componentDidMount(){
@@ -99,9 +101,12 @@ class TopNavigator extends Component{
   }
   renderItem(data){
     const item=data.item;
-    return <PopularItem projectModel={item} onSelect={()=>{
-      NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
-    }}></PopularItem>
+    return <PopularItem projectModel={item} 
+            onSelect={()=>{
+              NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
+            }}
+            onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_popular)}}
+    ></PopularItem>
   }
   genIndicator(){
     return this._store().hideLoadingMore?null:<View style={{alignItems:'center'}}>
@@ -115,7 +120,7 @@ class TopNavigator extends Component{
         <FlatList
           data={this._store().projectModes}
           renderItem={data=>this.renderItem(data)}
-          keyExtractor={item=>""+item.id}
+          keyExtractor={item=>""+item.item.id}
           refreshControl={
             <RefreshControl
               title='loading'
@@ -148,8 +153,8 @@ const mapStateToProps=state=>({
   popular:state.popular
 });
 const mapDispatchToProps=dispatch=>({
-  onLoadPopularData:(storeName,url,pageSize)=>dispatch(actions.onLoadPopularData(storeName,url,pageSize)),
-  onLoadMorePopular:(storeName,pageIndex,pageSize,items,callBack)=>dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,callBack))
+  onLoadPopularData:(storeName,url,pageSize,favoriteDao)=>dispatch(actions.onLoadPopularData(storeName,url,pageSize,favoriteDao)),
+  onLoadMorePopular:(storeName,pageIndex,pageSize,items,favoriteDao,callBack)=>dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
 })
 const PopularTabPage=connect(mapStateToProps,mapDispatchToProps)(TopNavigator)
 const styles = StyleSheet.create({
