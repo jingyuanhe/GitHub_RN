@@ -16,12 +16,12 @@ import {connect} from 'react-redux'
 import actions from '../action/index'
 import PopularItem from "../common/PopularItem";
 import FavoriteDao from "../expand/dao/FavoriteDao";
+import {FLAG_STORAGE} from "../expand/dao/DataStore";
+const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_popular)
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
 const THEME_COLOR='#678'
 const pageSize=10;
-import {FLAG_STORAGE} from "../expand/dao/DataStore";
-const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_popular)
 import Toast, {DURATION} from 'react-native-easy-toast'
 import FavoriteUtil from "../util/FavoriteUtil";
 export default class PopularPage extends Component{
@@ -78,7 +78,7 @@ class TopNavigator extends Component{
       store={
         items:[],
         isLoading:false,
-        projectModes:[],
+        projectModels:[],
         hideLoadingMore:true
       }
     }
@@ -103,7 +103,7 @@ class TopNavigator extends Component{
     const item=data.item;
     return <PopularItem projectModel={item} 
             onSelect={()=>{
-              NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
+              NavigatorUtil.gotoPage({projectModel:item.item},'DetailPage')
             }}
             onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_popular)}}
     ></PopularItem>
@@ -118,7 +118,7 @@ class TopNavigator extends Component{
     return(
       <View style={styles.container}>
         <FlatList
-          data={this._store().projectModes}
+          data={this._store().projectModels}
           renderItem={data=>this.renderItem(data)}
           keyExtractor={item=>""+item.item.id}
           refreshControl={

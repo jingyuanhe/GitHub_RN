@@ -6,7 +6,7 @@ import BaseItem from './BaseItem'
 export default class TrendingItem extends BaseItem{
     render(){
         const {projectModel}=this.props;
-        const item=projectModel;
+        const item=projectModel.item;
     if(!item) return null;
     const description=`<p>${item.description}</p>`
     return(

@@ -36,7 +36,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray=[],favo
                         type:types.POPULAR_LOAD_MORE_SUCCESS,
                         storeName,
                         pageIndex,
-                        projectModes:data
+                        projectModels:data
                     })
                 })
                 

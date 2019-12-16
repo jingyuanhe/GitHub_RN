@@ -21,6 +21,10 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import TrendingItem from "../common/TrendingItem";
 import Toast, {DURATION} from 'react-native-easy-toast'
+import FavoriteDao from "../expand/dao/FavoriteDao";
+import {FLAG_STORAGE} from "../expand/dao/DataStore";
+import FavoriteUtil from "../util/FavoriteUtil";
+const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_trending)
 const EVENT_TYPE_TIME_SPAN_CHANGE='EVENT_TYPE_TIME_SPAN_CHANGE'
 const THEME_COLOR='#678';
 const pageSize=10;
@@ -137,9 +141,9 @@ class TrendingTab extends Component{
     const {onLoadTrendingData,onLoadMoreTrending}=this.props;
     const url=this.genFetchUrl(this.storeName);
     if(loadMore){
-      onLoadMoreTrending(this.storeName,++this._store().pageIndex,pageSize,this._store().items,callBack=>{this.refs.toast.show('已经加载到底部了。。。')})
+      onLoadMoreTrending(this.storeName,++this._store().pageIndex,pageSize,this._store().items,favoriteDao,callBack=>{this.refs.toast.show('已经加载到底部了。。。')})
     }else{
-      onLoadTrendingData(this.storeName,url,pageSize);
+      onLoadTrendingData(this.storeName,url,pageSize,favoriteDao);
     }
   }
   genFetchUrl(key){
@@ -155,7 +159,7 @@ class TrendingTab extends Component{
       store={
         items:[],
         isLoading:false,
-        projectModes:[],
+        projectModels:[],
         hideLoadingMore:true
       }
     }
@@ -163,9 +167,12 @@ class TrendingTab extends Component{
   }
   renderItem(data){
     const item=data.item;
-    return <TrendingItem projectModel={item} onSelect={()=>{
-      NavigatorUtil.gotoPage({projectModel:item},'DetailPage')
-    }}></TrendingItem>
+    return <TrendingItem projectModel={item} 
+    onSelect={()=>{
+      NavigatorUtil.gotoPage({projectModel:item.item},'DetailPage')
+    }}
+    onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_trending)}}
+    ></TrendingItem>
   }
   genIndicator(){
     return this._store().hideLoadingMore?null:<View style={{alignItems:'center'}}>
@@ -178,9 +185,9 @@ class TrendingTab extends Component{
     return(
       <View style={styles.container}>
         <FlatList
-          data={store.projectModes}
+          data={store.projectModels}
           renderItem={data=>this.renderItem(data)}
-          keyExtractor={item=>""+(item.fullName)}
+          keyExtractor={item=>""+(item.item.fullName)}
           refreshControl={
             <RefreshControl
               title='loading'
@@ -213,8 +220,8 @@ const mapStateToProps=state=>({
   trending:state.trending
 });
 const mapActionToProps=dispatch=>({
-  onLoadTrendingData:(storeName,url,pageSize)=>dispatch(actions.onLoadTrendingData(storeName,url,pageSize)),
-  onLoadMoreTrending:(storeName,pageIndex,pageSize,items,callBack)=>dispatch(actions.onLoadMoreTrending(storeName,pageIndex,pageSize,items,callBack))
+  onLoadTrendingData:(storeName,url,pageSize,favoriteDao)=>dispatch(actions.onLoadTrendingData(storeName,url,pageSize,favoriteDao)),
+  onLoadMoreTrending:(storeName,pageIndex,pageSize,items,favoriteDao,callBack)=>dispatch(actions.onLoadMoreTrending(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
 })
 const TrendingTabPage= connect(mapStateToProps,mapActionToProps)(TrendingTab);
 const styles = StyleSheet.create({
