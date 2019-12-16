@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import PropTypes from "prop-types";
 import {  ViewPropTypes,View,Text,StatusBar,StyleSheet,Platform} from "react-native";
 const StatusBarShape={
-    barStyle:PropTypes.oneOf(['light-contnet','default']),
+    barStyle:PropTypes.oneOf(['light-content','default']),
     hidden:PropTypes.bool,
     backgroundColor:PropTypes.string
 }
