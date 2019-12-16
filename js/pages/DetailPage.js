@@ -6,8 +6,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 import {WebView} from 'react-native-webview'
-import AntDesign from "react-native-vector-icons/AntDesign";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import NavigationBar from "../common/NavigationBar";
+import FavoriteDao from "../expand/dao/FavoriteDao";
 const THEME_COLOR='#678';
 import ViewUtil from '../util/viewUtil'
 const TRENDING_URL='https://github.com/'
@@ -16,13 +17,15 @@ export default class DetailPage extends Component{
   constructor(props){
     super(props);
     this.params=this.props.navigation.state.params;
-    const {projectModel}=this.params;
-    this.url=projectModel.html_url||TRENDING_URL+projectModel.fullName;
-    this.title=projectModel.fullName||projectModel.full_name;
+    const {projectModel,flag}=this.params;
+    this.favoriteDao=new FavoriteDao(flag)
+    this.url=projectModel.item.html_url||TRENDING_URL+projectModel.item.fullName;
+    this.title=projectModel.item.fullName||projectModel.item.full_name;
     this.state={
       url:this.url,
       title:this.title,
-      canGoBack:false
+      canGoBack:false,
+      isFavorite:projectModel.isFavorite
     }
   }
   onBack(){
@@ -32,18 +35,32 @@ export default class DetailPage extends Component{
       NavigatorUtil.goBack(this.props.navigation);
     }
   }
+  onButtonFavoriteClick(){
+    const {projectModel,callback}=this.params;
+    const isFavorite=projectModel.isFavorite=!projectModel.isFavorite;
+    callback(isFavorite);
+    this.setState({
+      isFavorite:isFavorite
+    })
+    let key=projectModel.item.fullName?projectModel.item.fullName:projectModel.item.id.toString();
+    if(projectModel.isFavorite){
+      this.favoriteDao.saveFavoriteItem(key,JSON.stringify(projectModel));
+    }else{
+      this.favoriteDao.removeFavoriteItem(key)
+    }
+  }
   renderRightButton(){
       return (
         <View style={{flexDirection:'row'}}>
           <TouchableOpacity
-            onPress={()=>{}}
+            onPress={()=>{this.onButtonFavoriteClick()}}
           >
-            <AntDesign
-              name={'staro'}
+            <FontAwesome
+               name={this.state.isFavorite?'star':'star-o'}
               size={20}
               style={{color:'white',marginRight:10}}
             >
-            </AntDesign>
+            </FontAwesome>
           </TouchableOpacity>
           {ViewUtil.getShareButton(()=>{})}
         </View>

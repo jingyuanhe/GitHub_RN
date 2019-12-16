@@ -24,6 +24,8 @@ const THEME_COLOR='#678'
 const pageSize=10;
 import Toast, {DURATION} from 'react-native-easy-toast'
 import FavoriteUtil from "../util/FavoriteUtil";
+import EventBus from 'react-native-event-bus'
+import NavigationUtil from '../util/NavigationUtil.js'
 export default class PopularPage extends Component{
   constructor(props){
     super(props);
@@ -70,6 +72,7 @@ class TopNavigator extends Component{
     super(props);
     const {tabLabel}=this.props;
     this.storeName=tabLabel;
+    this.isFavoriteChanged=false;
   }
   _store(){
     const {popular}=this.props;
@@ -87,7 +90,7 @@ class TopNavigator extends Component{
   genFetchUrl(storeName){
     return URL+storeName+QUERY_STR;
   }
-  loadData(loadMore){
+  loadData(loadMore,refreshFavorite){
     const {onLoadPopularData,onLoadMorePopular}=this.props;
     const url=this.genFetchUrl(this.storeName);
     if(loadMore){
@@ -98,12 +101,25 @@ class TopNavigator extends Component{
   }
   componentDidMount(){
     this.loadData();
+    EventBus.getInstance().addListener(NavigationUtil.favorite_changed_popular,this.favoriteChangeListener = ()=>{
+      this.isFavoriteChanged = true;
+    });
+    EventBus.getInstance().addListener(NavigationUtil.bottom_tab_select,this.bottomTabSelectListener = (data)=>{
+      if(data.to === 0 && this.isFavoriteChanged){
+        this.loadData(null,true);
+      }
+    });
   }
+  componentWillUnmount(){
+    EventBus.getInstance().removeListener(this.favoriteChangeListener);
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener);
+  }
+
   renderItem(data){
     const item=data.item;
     return <PopularItem projectModel={item} 
-            onSelect={()=>{
-              NavigatorUtil.gotoPage({projectModel:item.item},'DetailPage')
+            onSelect={(callback)=>{
+              NavigatorUtil.gotoPage({projectModel:item,flag:FLAG_STORAGE.flag_popular,callback},'DetailPage')
             }}
             onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_popular)}}
     ></PopularItem>

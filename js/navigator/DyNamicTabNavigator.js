@@ -15,6 +15,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AntDesign from "react-native-vector-icons/AntDesign";
 import NavigatorUtil from '../navigator/NavigatorUtil'
 import {connect} from "react-redux";
+import EventBus from 'react-native-event-bus'
+import NavigationUtil from '../util/NavigationUtil.js'
 const tabs={
   PopularPage:{
       screen:PopularPage,
@@ -99,7 +101,14 @@ class DyNamicTabNavigator extends Component{
     render(){
       const Tab=createAppContainer(this._tabNavigator());
       return (
-        <Tab />
+        <Tab 
+          onNavigationStateChange={(prevState,nextState,action)=>{
+            EventBus.getInstance().fireEvent(NavigationUtil.bottom_tab_select, {
+              from:prevState.index,
+              to:nextState.index
+            })
+          }}
+        />
       );
     }
 }

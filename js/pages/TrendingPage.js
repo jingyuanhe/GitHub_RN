@@ -168,8 +168,8 @@ class TrendingTab extends Component{
   renderItem(data){
     const item=data.item;
     return <TrendingItem projectModel={item} 
-    onSelect={()=>{
-      NavigatorUtil.gotoPage({projectModel:item.item},'DetailPage')
+    onSelect={(callback)=>{
+      NavigatorUtil.gotoPage({projectModel:item,flag:FLAG_STORAGE.flag_trending,callback},'DetailPage')
     }}
     onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_trending)}}
     ></TrendingItem>
