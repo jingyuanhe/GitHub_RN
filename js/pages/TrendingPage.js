@@ -31,6 +31,8 @@ const pageSize=10;
 const statusBar={
   backgroundColor:THEME_COLOR
 }
+import EventBus from 'react-native-event-bus'
+import NavigationUtil from '../util/NavigationUtil.js'
 const URL='https://github.com/trending/';
 const QUERY_STR='&sort=stars'
 
@@ -123,7 +125,8 @@ class TrendingTab extends Component{
     super(props);
     const {tabLabel,timeSpan}=this.props;
     this.storeName=tabLabel;
-    this.timeSpan=timeSpan
+    this.timeSpan=timeSpan;
+    this.isFavoriteChanged =false;
   }
   componentDidMount(){
     this.loadData();
@@ -131,11 +134,21 @@ class TrendingTab extends Component{
       this.timeSpan = timeSpan;
       this.loadData();
   })
+  EventBus.getInstance().addListener(NavigationUtil.favorite_changed_trending,this.favoriteChangeListener = ()=>{
+    this.isFavoriteChanged = true;
+  });
+  EventBus.getInstance().addListener(NavigationUtil.bottom_tab_select,this.bottomTabSelectListener = (data)=>{
+    if(data.to ===1 && this.isFavoriteChanged){
+      this.loadData(null,true);
+    }
+  });
   }
   componentWillUnmount() {
     if (this.timeSpanChangeListener) {
         this.timeSpanChangeListener.remove();
     }
+    EventBus.getInstance().removeListener(this.favoriteChangeListener);
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener);
   }
   loadData(loadMore){
     const {onLoadTrendingData,onLoadMoreTrending}=this.props;
