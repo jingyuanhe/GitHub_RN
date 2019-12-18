@@ -16,6 +16,7 @@ import {MORE_MENU} from '../common/MoreMenu'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import GlobalStyles from "../res/GlobalStyles";
 import viewUtil from "../util/viewUtil";
+import NavigatorUtil from '../navigator/NavigatorUtil'
 class MyPage extends Component{
   getRightButton(){
     return(
@@ -48,7 +49,17 @@ class MyPage extends Component{
     )
   }
   onClick(menu){
-
+    let RouterName,params={};
+    switch(menu){
+      case MORE_MENU.Tutorial:
+        RouterName='WebViewPage';
+        params.title='教程';
+        params.url='https://coding.m.imooc.com/classindex.html?cid=89';
+        break;
+    }
+    if(RouterName){
+      NavigatorUtil.gotoPage(params,RouterName)
+    }
   }
   getItem(menu){
     return viewUtil.getMenuItem(()=>this.onClick(menu),menu,THEME_COLOR)

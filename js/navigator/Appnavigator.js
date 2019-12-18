@@ -14,9 +14,7 @@ import {
 import WelcomePage from "../pages/WelcomePage";
 import HomePage from "../pages/HomePage";
 import DetailPage from "../pages/DetailPage";
-import FetchDemoPage from '../pages/FetchDemoPage'
-import AsyncStorageDemoPage from '../pages/AsyncStorageDemoPage'
-import DataStoreDemoPage from "../pages/DataStoreDemoPage";
+import WebViewPage from '../pages/WebViewPage'
 import React from 'react';
 export const rootCom = 'Init';//设置根路由
 const InitNavigator=createStackNavigator({
@@ -40,22 +38,12 @@ const MainNavigator=createStackNavigator({
             header:null
         }
     },
-    FetchDemoPage:{
-        screen:FetchDemoPage,
+    WebViewPage:{
+        screen:WebViewPage,
         navigationOptions:{
-            // header:null
+            header:null
         }
-    },
-    AsyncStorageDemoPage:{
-        screen:AsyncStorageDemoPage,
-        navigationOptions:{
-            // header:null
-        }
-    },
-    DataStoreDemoPage:{
-        screen:DataStoreDemoPage
     }
-
 })
 export const RootNavigator=createSwitchNavigator({
     Init:InitNavigator,

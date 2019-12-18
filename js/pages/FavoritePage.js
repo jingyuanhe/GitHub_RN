@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
       flex:1,
       justifyContent:'center',
       backgroundColor:'#f5fcff',
-      alignItems:'center'
+      // alignItems:'center'
   },
   tabStyle:{
     minWidth:40

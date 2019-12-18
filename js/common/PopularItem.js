@@ -50,7 +50,7 @@ const styles=StyleSheet.create({
         shadowOffset:{width:.5,height:.5},
         shadowOpacity:.4,
         shadowRadius:1,
-        elevation:2
+        elevation:2,
     },
     title:{
         fontSize:16,
