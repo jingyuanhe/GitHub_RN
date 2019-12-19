@@ -10,7 +10,6 @@ const THEME_COLOR='#678'
 export default class AboutPage extends Component{
   constructor(props){
       super(props);
-      console.log(this.props.navigation)
       this.params=this.props.navigation.state.params;
       this.aboutCommon=new AboutCommon({
           ...this.params,
