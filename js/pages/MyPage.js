@@ -18,36 +18,6 @@ import GlobalStyles from "../res/GlobalStyles";
 import viewUtil from "../util/viewUtil";
 import NavigatorUtil from '../navigator/NavigatorUtil'
 class MyPage extends Component{
-  getRightButton(){
-    return(
-      <TouchableOpacity onPress={()=>{}}>
-        <View style={{padding:5,marginRight:8}}>
-          <AntDesign
-            name={'search1'}
-            size={24}
-            style={{color:'#fff'}}
-          >
-
-          </AntDesign>
-        </View>
-      </TouchableOpacity>
-    )
-  }
-  getLeftButton(){
-    return(
-      <TouchableOpacity onPress={()=>{}}>
-        <View style={{padding:5,marginLeft:12}}>
-          <AntDesign
-            name={'left'}
-            size={24}
-            style={{color:'#fff'}}
-          >
-          </AntDesign>
-        </View>
-      </TouchableOpacity>
-      
-    )
-  }
   onClick(menu){
     let RouterName,params={};
     switch(menu){
@@ -56,6 +26,12 @@ class MyPage extends Component{
         params.title='教程';
         params.url='https://coding.m.imooc.com/classindex.html?cid=89';
         break;
+      case MORE_MENU.About:
+        RouterName='AboutPage';
+        break;
+      case MORE_MENU.About_Author:
+        RouterName='AboutMePage';
+        break;  
     }
     if(RouterName){
       NavigatorUtil.gotoPage(params,RouterName)
@@ -68,7 +44,7 @@ class MyPage extends Component{
     const statusBar={
       backgroundColor:THEME_COLOR
     }
-    const navigationBar=<NavigationBar title={'我的'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}} rightButton={this.getRightButton()} leftButton={this.getLeftButton()}></NavigationBar>
+    const navigationBar=<NavigationBar title={'我的'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
     return (
       <View style={GlobalStyles.root_container}>
         {navigationBar}

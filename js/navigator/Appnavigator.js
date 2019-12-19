@@ -15,6 +15,8 @@ import WelcomePage from "../pages/WelcomePage";
 import HomePage from "../pages/HomePage";
 import DetailPage from "../pages/DetailPage";
 import WebViewPage from '../pages/WebViewPage'
+import AboutPage from '../pages/about/AboutPage'
+import AboutMePage from '../pages/about/AboutMePage'
 import React from 'react';
 export const rootCom = 'Init';//设置根路由
 const InitNavigator=createStackNavigator({
@@ -40,6 +42,18 @@ const MainNavigator=createStackNavigator({
     },
     WebViewPage:{
         screen:WebViewPage,
+        navigationOptions:{
+            header:null
+        }
+    },
+    AboutPage:{
+        screen:AboutPage,
+        navigationOptions:{
+            header:null
+        }
+    },
+    AboutMePage:{
+        screen:AboutMePage,
         navigationOptions:{
             header:null
         }
