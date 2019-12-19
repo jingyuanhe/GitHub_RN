@@ -38,7 +38,10 @@ export default class AboutPage extends Component{
               return Linking.openURL(url);
             }
         }).catch(err => console.error('An error occurred', err));
-        break; 
+        break;
+        case MORE_MENU.About_Author:
+            RouterName='AboutMePage';
+            break;
     }
     if(RouterName){
       NavigatorUtil.gotoPage(params,RouterName)

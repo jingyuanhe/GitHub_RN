@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View,Linking} from 'react-native';
+import {View,Linking,Clipboard} from 'react-native';
 import {MORE_MENU} from '../../common/MoreMenu'
 import GlobalStyles from "../../res/GlobalStyles";
 import viewUtil from "../../util/viewUtil";
@@ -8,6 +8,7 @@ import AboutCommon,{FLAG_ABOUT} from './AboutCommon'
 import config from '../../res/data/config.json'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 const THEME_COLOR='#678'
+import Toast, {DURATION} from 'react-native-easy-toast'
 export default class AboutMePage extends Component{
   constructor(props){
       super(props);
@@ -25,16 +26,17 @@ export default class AboutMePage extends Component{
         showContact:false
       }
   }
-  onClick(menu){
-    let RouterName,params={};
-    switch(menu){
-      case MORE_MENU.Tutorial:
-        RouterName='WebViewPage';
-        params.title='教程';
-        params.url='https://coding.m.imooc.com/classindex.html?cid=89';
-        break;
-      case MORE_MENU.Feedback:
-        let url='mailto:389026847@qq.com';
+  onClick(tab){
+    if(!tab) return;
+    if(tab.url){
+        NavigatorUtil.gotoPage({
+            title:tab.title,
+            url:tab.url
+        },'WebViewPage');
+        return
+    }
+    if(tab.account&&tab.account.indexOf('@')>-1){
+        let url=`mailto:${tab.account}`;
         Linking.canOpenURL(url).then(supported => {
             if (!supported) {
               console.log('Can\'t handle url: ' + url);
@@ -42,10 +44,11 @@ export default class AboutMePage extends Component{
               return Linking.openURL(url);
             }
         }).catch(err => console.error('An error occurred', err));
-        break; 
+        return;
     }
-    if(RouterName){
-      NavigatorUtil.gotoPage(params,RouterName)
+    if(tab.account){
+        Clipboard.setString(tab.account);
+        this.toast.show(`${tab.title}:${tab.account}已复制到剪切板。`)
     }
   }
   getItem(menu){
@@ -87,6 +90,9 @@ export default class AboutMePage extends Component{
          <View style={GlobalStyles.line}></View>
          {this.state.showQQ?this.renderItems(this.state.data.aboutMe.QQ.items,true):null}
     </View>
-    return this.aboutCommon.render(content,this.state.data.author)
+    return <View style={{flex:1}}>
+        {this.aboutCommon.render(content,this.state.data.author)}
+        <Toast ref={toast=>{this.toast=toast}} position={'center'}/>
+    </View>
   }
 }
