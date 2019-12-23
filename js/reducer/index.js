@@ -3,6 +3,7 @@ import theme from './theme'
 import popular from "./popular";
 import trending from "./trending";
 import favorite from './favorite'
+import language from "./language";
 import {rootCom,RootNavigator} from '../navigator/Appnavigator';
 //1.指定默认state
 const navState = RootNavigator.router.getStateForAction(RootNavigator.router.getActionForPathAndParams(rootCom));
@@ -25,7 +26,8 @@ const index = combineReducers({
     theme: theme,
     popular,
     trending,
-    favorite
+    favorite,
+    language
 });
 
 export default index;

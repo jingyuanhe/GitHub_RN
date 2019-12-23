@@ -26,25 +26,32 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import FavoriteUtil from "../util/FavoriteUtil";
 import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
-export default class PopularPage extends Component{
+import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
+class PopularPage extends Component{
   constructor(props){
     super(props);
-    this.tabNames=['Android','ios','React','Vue','React Native'];
+    const {onLoadLanguage}=this.props;
+    onLoadLanguage(FLAG_LANGUAGE.flag_key)
   }
   _GetTabs(){
     const tabs={}
-    this.tabNames.forEach((item,index)=>{
-      tabs[`tab${index}`]={
-        screen:props=><PopularTabPage {...props} tabLabel={item}/>,
-        navigationOptions:{
-          title:item
+    const {keys}=this.props;
+    keys.forEach((item,index)=>{
+      if(item.checked){
+        tabs[`tab${index}`]={
+          screen:props=><PopularTabPage {...props} tabLabel={item.name}/>,
+          navigationOptions:{
+            title:item.name
+          }
         }
       }
+      
     })
     return tabs
   }
   render(){
-    const TabNavigator=createAppContainer(createMaterialTopTabNavigator(
+    const {keys}=this.props;
+    const TabNavigator=keys.length?createAppContainer(createMaterialTopTabNavigator(
       this._GetTabs(),{
         tabBarOptions:{
           tabStyle:styles.tabStyle,
@@ -54,7 +61,7 @@ export default class PopularPage extends Component{
           labelStyle:styles.labelStyle
         }
       }
-    ))
+    )):null;
     const statusBar={
       backgroundColor:THEME_COLOR
     }
@@ -62,11 +69,18 @@ export default class PopularPage extends Component{
     return (
       <View style={{flex:1,marginTop:0}}>
           {navigationBar}
-          <TabNavigator></TabNavigator>
+          {TabNavigator?<TabNavigator></TabNavigator>:null}
       </View>
     );
   }
 }
+const mapPopularStateToProps=state=>({
+  keys:state.language.keys
+});
+const mapPopularDispatchToProps=dispatch=>({
+  onLoadLanguage:(flag)=>dispatch(actions.onLoadLanguage(flag))
+})
+export default connect(mapPopularStateToProps,mapPopularDispatchToProps)(PopularPage)
 class TopNavigator extends Component{
   constructor(props){
     super(props);
@@ -170,7 +184,8 @@ const mapStateToProps=state=>({
 });
 const mapDispatchToProps=dispatch=>({
   onLoadPopularData:(storeName,url,pageSize,favoriteDao)=>dispatch(actions.onLoadPopularData(storeName,url,pageSize,favoriteDao)),
-  onLoadMorePopular:(storeName,pageIndex,pageSize,items,favoriteDao,callBack)=>dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,favoriteDao,callBack))
+  onLoadMorePopular:(storeName,pageIndex,pageSize,items,favoriteDao,callBack)=>dispatch(actions.onLoadMorePopular(storeName,pageIndex,pageSize,items,favoriteDao,callBack)),
+
 })
 const PopularTabPage=connect(mapStateToProps,mapDispatchToProps)(TopNavigator)
 const styles = StyleSheet.create({
