@@ -76,6 +76,8 @@ class MyPage extends Component{
           <Text style={styles.groupTitle}>最热管理</Text>
           {this.getItem(MORE_MENU.Custom_Key)}
           <View style={GlobalStyles.line}></View>
+          {this.getItem(MORE_MENU.Sort_Key)}
+          <View style={GlobalStyles.line}></View>
           {this.getItem(MORE_MENU.Remove_Key)}
           <Text style={styles.groupTitle}>设置</Text>
           {this.getItem(MORE_MENU.Custom_Theme)}

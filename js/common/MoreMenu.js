@@ -7,7 +7,7 @@ export const MORE_MENU={
     Sort_Language:{name:'语言排序',Icons:MaterialCommunityIcons,icon:'sort'},
     Custom_Theme:{name:'自定义主题',Icons:Ionicons,icon:'ios-color-palette'},
     Custom_Key:{name:'自定义标签',Icons:Ionicons,icon:'ios-color-palette'},
-    Sort_Key:{name:'标签排序',Icons:Ionicons,icon:'sort'},
+    Sort_Key:{name:'标签排序',Icons:MaterialCommunityIcons,icon:'sort'},
     Remove_Key:{name:'标签移除',Icons:Ionicons,icon:'md-remove'},
     About_Author:{name:'关于作者',Icons: FontAwesome,icon:'smile-o'},
     About:{name:'关于',Icons:Ionicons,icon:'logo-github'},
