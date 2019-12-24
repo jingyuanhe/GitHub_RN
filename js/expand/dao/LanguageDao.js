@@ -22,7 +22,6 @@ export default class LanguageDao{
                         resolve(JSON.parse(result));
                     }
                     catch(error){
-                        alert(2)
                         reject(error)
                     }
                         
@@ -34,7 +33,6 @@ export default class LanguageDao{
     saveData(objectData){
         let stringData=JSON.stringify(objectData);
         AsyncStorage.setItem(this.flag,stringData,(error,result)=>{
-            alert(error)
         })
     }
 }

@@ -35,8 +35,8 @@ import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
 const URL='https://github.com/trending/';
 const QUERY_STR='&sort=stars'
-
-export default class TrendingPage extends Component{
+import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
+class TrendingPage extends Component{
   constructor(props){
     super(props);
     this.state={
@@ -44,17 +44,23 @@ export default class TrendingPage extends Component{
     };
     const {tabLabel}=this.props;
     this.storeName=tabLabel;
-    this.tabNames=['All','C','C++','PHP','Javascript'];
+    const {onLoadLanguage}=this.props;
+    onLoadLanguage(FLAG_LANGUAGE.flag_language)
+    //this.tabNames=['All','C','C++','PHP','Javascript'];
   }
   _getTabs(){
     const tabs={}
-    this.tabNames.forEach((item,index)=>{
-      tabs[`tab${index}`]={
-        screen:props=><TrendingTabPage {...props} tabLabel={item} timeSpan={this.state.TimeSpan}/>,
-        navigationOptions:{
-          title:item
+    const {languages}=this.props;
+    languages.forEach((item,index)=>{
+      if(item.checked){
+        tabs[`tab${index}`]={
+          screen:props=><TrendingTabPage {...props} tabLabel={item.name} timeSpan={this.state.TimeSpan}/>,
+          navigationOptions:{
+            title:item.name
+          }
         }
       }
+      
     })
     return tabs
   }
@@ -114,12 +120,19 @@ export default class TrendingPage extends Component{
     return (
       <View style={{flex:1,marginTop:0}}>
           {navigationBar}
-          <TabNavigator></TabNavigator>
+          {TabNavigator?<TabNavigator></TabNavigator>:null}
           {this.renderTrendingDialog()}
       </View>
     );
   }
 };
+const mapTrendingStateToProps=state=>({
+  languages:state.language.languages
+});
+const mapTrendingDispatchToProps=dispatch=>({
+  onLoadLanguage:(flag)=>dispatch(actions.onLoadLanguage(flag))
+})
+export default connect(mapTrendingStateToProps,mapTrendingDispatchToProps)(TrendingPage)
 class TrendingTab extends Component{
   constructor(props){
     super(props);
