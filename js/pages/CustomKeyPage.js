@@ -1,5 +1,5 @@
 import React,{ Component } from "react";
-import { View,StyleSheet,ScrollView } from "react-native";
+import { View,StyleSheet,ScrollView,Alert } from "react-native";
 import LanguageDao from "../expand/dao/LanguageDao";
 import { connect } from 'react-redux';
 import actions from "../action/index";
@@ -40,7 +40,19 @@ class CustomKeyPage extends Component{
         return null;
     }
     onSave(){
-
+        if(this.changeValues.length===0){
+            NavigatorUtil.goBack(this.props.navigation)
+        }
+        let keys;
+        if(this.isRemoveKey){
+            for(let i=0;i<this.changeValues.length;i++){
+                ArrayUtil.remove(keys=CustomKeyPage._keys(this.props,true),this.changeValues[i],'name')
+            }
+        }
+        this.languageDao.saveData(keys||this.state.keys);
+        const {onLoadLanguage}=this.props;
+        onLoadLanguage(this.params.flag)
+        NavigatorUtil.goBack(this.props.navigation)
     }
     onClick(data,index){
         data.checked=!data.checked;
@@ -84,11 +96,24 @@ class CustomKeyPage extends Component{
                 </View>
             )
         }
-        console.log(views)
         return views
     }
     onBack(){
-        NavigatorUtil.goBack(this.props.navigation);
+        if(this.changeValues.length>0){
+            Alert.alert('提示','要保存修改吗',[
+                {
+                    text:'否',
+                    onPress:()=>{NavigatorUtil.goBack(this.props.navigation)}
+                },
+                {
+                    text:'是',
+                    onPress:()=>{this.onSave()}
+                }
+            ])
+        }else{
+            NavigatorUtil.goBack(this.props.navigation)
+        }
+        
     }
     render(){
         let title=this.isRemoveKey?'移除标签':'自定义标签';
@@ -100,7 +125,6 @@ class CustomKeyPage extends Component{
             leftButton={viewUtil.getLeftBackButton(()=>this.onBack())} 
             rightButton={viewUtil.getRightButton(rightButtonTitle,()=>this.onSave())}
         >
-
         </NavigationBar>;
         return(
             <View style={styles.container}>
@@ -115,7 +139,13 @@ class CustomKeyPage extends Component{
         const {flag,isRemoveKey}=props.navigation.state.params;
         let key=flag===FLAG_LANGUAGE.flag_key?'keys':'languages';
         if(isRemoveKey&&!original){
-
+            //如果state中的keys为空则从props中取
+            return state && state.keys && state.keys.length !== 0 && state.keys || props.language[key].map(val => {
+                return {//注意：不直接修改props，copy一份
+                    ...val,
+                    checked: false
+                };
+            });
         }else{
             return props.language[key]
         }

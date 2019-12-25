@@ -59,7 +59,8 @@ class PopularPage extends Component{
           upperCaseLabel:false,
           indicatorStyle:styles.indicatorStyle,
           labelStyle:styles.labelStyle
-        }
+        },
+        lazy:true
       }
     )):null;
     const statusBar={

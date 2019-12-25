@@ -37,7 +37,7 @@ class MyPage extends Component{
       case MORE_MENU.Custom_Key:
       case MORE_MENU.Remove_Key:
         RouterName='CustomKeyPage';
-        params.isRemoveKey=menu===MORE_MENU.isRemoveKey;
+        params.isRemoveKey=menu===MORE_MENU.Remove_Key;
         params.flag=menu!==MORE_MENU.Custom_Language?FLAG_LANGUAGE.flag_key:FLAG_LANGUAGE.flag_language;
         break;
     }

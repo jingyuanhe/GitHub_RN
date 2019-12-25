@@ -100,19 +100,18 @@ class TrendingPage extends Component{
   }
   _tabNav(){
     const {languages}=this.props;
-    if(!this.tabNav){
-      this.tabNav=languages.length?createAppContainer(createMaterialTopTabNavigator(
-        this._getTabs(),{
-          tabBarOptions:{
-            tabStyle:styles.tabStyle,
-            scrollEnabled:true,
-            upperCaseLabel:false,
-            indicatorStyle:styles.indicatorStyle,
-            labelStyle:styles.labelStyle
-          }
-        }
-      )):null
-    };
+    this.tabNav=languages.length?createAppContainer(createMaterialTopTabNavigator(
+      this._getTabs(),{
+        tabBarOptions:{
+          tabStyle:styles.tabStyle,
+          scrollEnabled:true,
+          upperCaseLabel:false,
+          indicatorStyle:styles.indicatorStyle,
+          labelStyle:styles.labelStyle
+        },
+        lazy:true
+      }
+    )):null;
     return this.tabNav;
   }
   render(){
