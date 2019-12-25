@@ -9,6 +9,7 @@ import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
 import CheckBox from 'react-native-check-box'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import NavigatorUtil from '../navigator/NavigatorUtil'
+import ArrayUtil from '../util/ArrayUtil'
 const THEME_COLOR='#678';
 class CustomKeyPage extends Component{
     constructor(props){
@@ -41,8 +42,13 @@ class CustomKeyPage extends Component{
     onSave(){
 
     }
-    onClick(){
-
+    onClick(data,index){
+        data.checked=!data.checked;
+        ArrayUtil.updataArray(this.changeValues,data);
+        this.state.keys[index]=data;
+        this.setState({
+            keys:this.state.keys
+        })
     }
     _checkedImage(checkd){
         return <Ionicons
@@ -56,7 +62,7 @@ class CustomKeyPage extends Component{
         return <CheckBox
             style={{flex: 1, padding: 10}}
             onClick={()=>this.onClick(data,index)}
-            isChecked={data.isChecked}
+            isChecked={data.checked}
             leftText={data.name}
             checkedImage={this._checkedImage(true)}
             unCheckedImage={this._checkedImage(false)}
