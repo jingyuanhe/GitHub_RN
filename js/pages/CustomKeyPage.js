@@ -6,6 +6,9 @@ import actions from "../action/index";
 import NavigationBar from "../common/NavigationBar";
 import viewUtil from "../util/viewUtil";
 import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
+import CheckBox from 'react-native-check-box'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import NavigatorUtil from '../navigator/NavigatorUtil'
 const THEME_COLOR='#678';
 class CustomKeyPage extends Component{
     constructor(props){
@@ -27,28 +30,72 @@ class CustomKeyPage extends Component{
             keys:CustomKeyPage._keys(this.props)
         })
     }
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(prevState.key!==CustomKeyPage._keys(nextProps,null,prevState)){
+            return{
+                keys:CustomKeyPage._keys(nextProps,null,prevState)
+            }
+        }
+        return null;
+    }
     onSave(){
 
+    }
+    onClick(){
+
+    }
+    _checkedImage(checkd){
+        return <Ionicons
+            size={20}
+            style={{color:THEME_COLOR}}
+            name={checkd?'ios-checkbox':'md-square-outline'}
+        >
+        </Ionicons>
+    }
+    renderCheckBox(data,index){
+        return <CheckBox
+            style={{flex: 1, padding: 10}}
+            onClick={()=>this.onClick(data,index)}
+            isChecked={data.isChecked}
+            leftText={data.name}
+            checkedImage={this._checkedImage(true)}
+            unCheckedImage={this._checkedImage(false)}
+        />
     }
     renderView(){
         let dataArray=this.state.keys;
         if(!dataArray||dataArray.length===0) return;
         let len=dataArray.length;
         let views=[];
-        for(let i=0;i<len;i+2){
+        for(let i=0;i<len;i+=2){
             views.push(
                 <View key={i}>
-                    <View style={styles.item}></View>
-                    <View styles={styles.line}></View>
+                    <View style={styles.item}>
+                        {this.renderCheckBox(dataArray[i],i)}
+                        {i+1<len&&this.renderCheckBox(dataArray[i+1],i+1)}
+                    </View>
+                    <View style={styles.line}></View>
                 </View>
             )
         }
+        console.log(views)
+        return views
+    }
+    onBack(){
+        NavigatorUtil.goBack(this.props.navigation);
     }
     render(){
         let title=this.isRemoveKey?'移除标签':'自定义标签';
-        title=this.props.flag===FLAG_LANGUAGE.flag_key?'自定义语言':title;
+        title=this.params.flag===FLAG_LANGUAGE.flag_language?'自定义语言':title;
         let rightButtonTitle=this.isRemoveKey?'移除':'保存';
-        let navigationBar=<NavigationBar style={{backgroundColor:THEME_COLOR}} title={title} rightButton={viewUtil.getRightButton(rightButtonTitle,()=>this.onSave())}></NavigationBar>;
+        let navigationBar=<NavigationBar 
+            style={{backgroundColor:THEME_COLOR}} 
+            title={title}
+            leftButton={viewUtil.getLeftBackButton(()=>this.onBack())} 
+            rightButton={viewUtil.getRightButton(rightButtonTitle,()=>this.onSave())}
+        >
+
+        </NavigationBar>;
         return(
             <View style={styles.container}>
                 {navigationBar}
@@ -75,12 +122,9 @@ const mapDispatchToProps=dispatch=>({
     onLoadLanguage:(flag)=>dispatch(actions.onLoadLanguage(flag))
 })
 export default connect(mapStateToProps,mapDispatchToProps)(CustomKeyPage)
-onst styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container:{
         flex:1,
-        justifyContent:'center',
-        backgroundColor:'#f5fcff',
-        alignItems:'center'
     },
     item:{
         flexDirection:'row'

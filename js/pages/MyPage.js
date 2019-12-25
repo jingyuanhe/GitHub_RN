@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import GlobalStyles from "../res/GlobalStyles";
 import viewUtil from "../util/viewUtil";
 import NavigatorUtil from '../navigator/NavigatorUtil'
+import { FLAG_LANGUAGE } from '../expand/dao/LanguageDao';
 class MyPage extends Component{
   onClick(menu){
     let RouterName,params={};
@@ -32,6 +33,13 @@ class MyPage extends Component{
       case MORE_MENU.About_Author:
         RouterName='AboutMePage';
         break;  
+      case MORE_MENU.Custom_Language:
+      case MORE_MENU.Custom_Key:
+      case MORE_MENU.Remove_Key:
+        RouterName='CustomKeyPage';
+        params.isRemoveKey=menu===MORE_MENU.isRemoveKey;
+        params.flag=menu!==MORE_MENU.Custom_Language?FLAG_LANGUAGE.flag_key:FLAG_LANGUAGE.flag_language;
+        break;
     }
     if(RouterName){
       NavigatorUtil.gotoPage(params,RouterName)

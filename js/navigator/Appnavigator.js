@@ -17,6 +17,7 @@ import DetailPage from "../pages/DetailPage";
 import WebViewPage from '../pages/WebViewPage'
 import AboutPage from '../pages/about/AboutPage'
 import AboutMePage from '../pages/about/AboutMePage'
+import CustomKeyPage from '../pages/CustomKeyPage'
 import React from 'react';
 export const rootCom = 'Init';//设置根路由
 const InitNavigator=createStackNavigator({
@@ -54,6 +55,12 @@ const MainNavigator=createStackNavigator({
     },
     AboutMePage:{
         screen:AboutMePage,
+        navigationOptions:{
+            header:null
+        }
+    },
+    CustomKeyPage:{
+        screen:CustomKeyPage,
         navigationOptions:{
             header:null
         }

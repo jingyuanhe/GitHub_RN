@@ -99,8 +99,9 @@ class TrendingPage extends Component{
     ></TrendingDiaLog>
   }
   _tabNav(){
+    const {languages}=this.props;
     if(!this.tabNav){
-      this.tabNav=createAppContainer(createMaterialTopTabNavigator(
+      this.tabNav=languages.length?createAppContainer(createMaterialTopTabNavigator(
         this._getTabs(),{
           tabBarOptions:{
             tabStyle:styles.tabStyle,
@@ -110,8 +111,8 @@ class TrendingPage extends Component{
             labelStyle:styles.labelStyle
           }
         }
-      ))
-    }
+      )):null
+    };
     return this.tabNav;
   }
   render(){
