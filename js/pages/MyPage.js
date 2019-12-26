@@ -5,7 +5,8 @@ import {
   Text,
   Button,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Linking
 } from 'react-native';
 import actions from "../action/index";
 import {connect} from "react-redux";
@@ -32,6 +33,14 @@ class MyPage extends Component{
         break;
       case MORE_MENU.About_Author:
         RouterName='AboutMePage';
+        break;
+      case MORE_MENU.Sort_Key:
+        RouterName='SortKeyPage';
+        params.flag=FLAG_LANGUAGE.flag_key;
+        break;
+      case MORE_MENU.Sort_Language:
+        RouterName='SortKeyPage';
+        params.flag=FLAG_LANGUAGE.flag_language;
         break;  
       case MORE_MENU.Custom_Language:
       case MORE_MENU.Custom_Key:
@@ -40,6 +49,16 @@ class MyPage extends Component{
         params.isRemoveKey=menu===MORE_MENU.Remove_Key;
         params.flag=menu!==MORE_MENU.Custom_Language?FLAG_LANGUAGE.flag_key:FLAG_LANGUAGE.flag_language;
         break;
+      case MORE_MENU.Feedback:
+        let url='mailto:389026847@qq.com';
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+              console.log('Can\'t handle url: ' + url);
+            } else {
+              return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
+        break;  
     }
     if(RouterName){
       NavigatorUtil.gotoPage(params,RouterName)
