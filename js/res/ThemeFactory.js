@@ -2,7 +2,7 @@
  * 主题
  */
 import React from 'react';
-import {StyleSheet,} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const ThemeFlags = {
     Default: '#2196F3',

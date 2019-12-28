@@ -26,11 +26,7 @@ import {FLAG_STORAGE} from "../expand/dao/DataStore";
 import FavoriteUtil from "../util/FavoriteUtil";
 const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_trending)
 const EVENT_TYPE_TIME_SPAN_CHANGE='EVENT_TYPE_TIME_SPAN_CHANGE'
-const THEME_COLOR='#678';
 const pageSize=10;
-const statusBar={
-  backgroundColor:THEME_COLOR
-}
 import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
 const URL='https://github.com/trending/';
@@ -51,10 +47,11 @@ class TrendingPage extends Component{
   _getTabs(){
     const tabs={}
     const {languages}=this.props;
+    const {theme}=this.props;
     languages.forEach((item,index)=>{
       if(item.checked){
         tabs[`tab${index}`]={
-          screen:props=><TrendingTabPage {...props} tabLabel={item.name} timeSpan={this.state.TimeSpan}/>,
+          screen:props=><TrendingTabPage {...props} tabLabel={item.name} timeSpan={this.state.TimeSpan} theme={theme}/>,
           navigationOptions:{
             title:item.name
           }
@@ -115,7 +112,11 @@ class TrendingPage extends Component{
     return this.tabNav;
   }
   render(){
-    const navigationBar=<NavigationBar titleView={this.renderTitleView()} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+    const {theme}=this.props;
+    const statusBar={
+      backgroundColor:theme.themeColor
+    }
+    const navigationBar=<NavigationBar titleView={this.renderTitleView()} statusBar={statusBar} style={theme.styles.navBar}></NavigationBar>
     const TabNavigator=this._tabNav();
     return (
       <View style={{flex:1,marginTop:0}}>
@@ -127,7 +128,8 @@ class TrendingPage extends Component{
   }
 };
 const mapTrendingStateToProps=state=>({
-  languages:state.language.languages
+  languages:state.language.languages,
+  theme:state.theme.theme
 });
 const mapTrendingDispatchToProps=dispatch=>({
   onLoadLanguage:(flag)=>dispatch(actions.onLoadLanguage(flag))
@@ -193,7 +195,9 @@ class TrendingTab extends Component{
   }
   renderItem(data){
     const item=data.item;
-    return <TrendingItem projectModel={item} 
+    const {theme}=this.props;
+    return <TrendingItem projectModel={item}
+    theme={theme} 
     onSelect={(callback)=>{
       NavigatorUtil.gotoPage({projectModel:item,flag:FLAG_STORAGE.flag_trending,callback},'DetailPage')
     }}
@@ -207,6 +211,7 @@ class TrendingTab extends Component{
     </View>
   }
   render(){
+    const {theme}=this.props;
     let store=this._store();
     return(
       <View style={styles.container}>
@@ -219,6 +224,9 @@ class TrendingTab extends Component{
               title='loading'
               refreshing={this._store().isLoading}
               onRefresh={()=>this.loadData()}
+              tintColor={theme.themeColor}
+              titleColor={theme.themeColor}
+              colors={[theme.themeColor]}
             >
             </RefreshControl>
           }

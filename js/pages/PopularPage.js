@@ -20,7 +20,6 @@ import {FLAG_STORAGE} from "../expand/dao/DataStore";
 const favoriteDao=new FavoriteDao(FLAG_STORAGE.flag_popular)
 const URL='https://api.github.com/search/repositories?q=';
 const QUERY_STR='&sort=stars'
-const THEME_COLOR='#678'
 const pageSize=10;
 import Toast, {DURATION} from 'react-native-easy-toast'
 import FavoriteUtil from "../util/FavoriteUtil";
@@ -36,10 +35,11 @@ class PopularPage extends Component{
   _GetTabs(){
     const tabs={}
     const {keys}=this.props;
+    const {theme}=this.props;
     keys.forEach((item,index)=>{
       if(item.checked){
         tabs[`tab${index}`]={
-          screen:props=><PopularTabPage {...props} tabLabel={item.name}/>,
+          screen:props=><PopularTabPage {...props} tabLabel={item.name} theme={theme}/>,
           navigationOptions:{
             title:item.name
           }
@@ -51,12 +51,16 @@ class PopularPage extends Component{
   }
   render(){
     const {keys}=this.props;
+    const {theme}=this.props;
     const TabNavigator=keys.length?createAppContainer(createMaterialTopTabNavigator(
       this._GetTabs(),{
         tabBarOptions:{
           tabStyle:styles.tabStyle,
           scrollEnabled:true,
           upperCaseLabel:false,
+          style:{
+            backgroundColor:theme.themeColor
+          },
           indicatorStyle:styles.indicatorStyle,
           labelStyle:styles.labelStyle
         },
@@ -64,9 +68,9 @@ class PopularPage extends Component{
       }
     )):null;
     const statusBar={
-      backgroundColor:THEME_COLOR
+      backgroundColor:theme.themeColor
     }
-    const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+    const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={theme.styles.navBar}></NavigationBar>
     return (
       <View style={{flex:1,marginTop:0}}>
           {navigationBar}
@@ -76,7 +80,8 @@ class PopularPage extends Component{
   }
 }
 const mapPopularStateToProps=state=>({
-  keys:state.language.keys
+  keys:state.language.keys,
+  theme:state.theme.theme
 });
 const mapPopularDispatchToProps=dispatch=>({
   onLoadLanguage:(flag)=>dispatch(actions.onLoadLanguage(flag))
@@ -132,9 +137,11 @@ class TopNavigator extends Component{
 
   renderItem(data){
     const item=data.item;
-    return <PopularItem projectModel={item} 
+    const {theme}=this.props;
+    return <PopularItem projectModel={item}
+            theme={theme} 
             onSelect={(callback)=>{
-              NavigatorUtil.gotoPage({projectModel:item,flag:FLAG_STORAGE.flag_popular,callback},'DetailPage')
+              NavigatorUtil.gotoPage({projectModel:item,flag:FLAG_STORAGE.flag_popular,callback,theme:theme},'DetailPage')
             }}
             onFavorite={(item,isFavoriter)=>{FavoriteUtil.onFavorite(favoriteDao,item,isFavoriter,FLAG_STORAGE.flag_popular)}}
     ></PopularItem>
@@ -146,6 +153,7 @@ class TopNavigator extends Component{
     </View>
   }
   render(){
+    const {theme}=this.props;
     return(
       <View style={styles.container}>
         <FlatList
@@ -157,6 +165,9 @@ class TopNavigator extends Component{
               title='loading'
               refreshing={this._store().isLoading}
               onRefresh={()=>this.loadData()}
+              tintColor={theme.themeColor}
+              titleColor={theme.themeColor}
+              colors={[theme.themeColor]}
             >
             </RefreshControl>
           }

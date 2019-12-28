@@ -23,21 +23,22 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import FavoriteUtil from "../util/FavoriteUtil";
 import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
-export default class FavoritePage extends Component{
+class FavoritePage extends Component{
   constructor(props){
     super(props);
   }
   render(){
+    const {theme}=this.props;
     const TabNavigator=createAppContainer(createMaterialTopTabNavigator(
       {
         'Popular':{
-          screen:props=><FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_popular}/>,
+          screen:props=><FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_popular} theme={theme}/>,
           navigationOptions:{
             title:'最热'
           }
         },
         'Trending':{
-          screen:props=><FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_trending}/>,
+          screen:props=><FavoriteTabPage {...props} flag={FLAG_STORAGE.flag_trending} theme={theme}/>,
           navigationOptions:{
             title:'趋势'
           }
@@ -52,9 +53,9 @@ export default class FavoritePage extends Component{
       }
     ))
     const statusBar={
-      backgroundColor:THEME_COLOR
+      backgroundColor:theme.themeColor
     }
-    const navigationBar=<NavigationBar title={'收藏'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+    const navigationBar=<NavigationBar title={'收藏'} statusBar={statusBar} style={theme.styles.navBar}></NavigationBar>
     return (
       <View style={{flex:1,marginTop:0}}>
           {navigationBar}
@@ -63,6 +64,12 @@ export default class FavoritePage extends Component{
     );
   }
 }
+const mapFavoriteStateToProps=state=>({
+  theme:state.theme.theme
+});
+const mapFavoriteDispatchToProps=dispatch=>({
+})
+export default connect(mapFavoriteStateToProps,mapFavoriteDispatchToProps)(FavoritePage)
 class FavoriteTab extends Component{
   constructor(props){
     super(props);
@@ -107,10 +114,12 @@ class FavoriteTab extends Component{
   }
   renderItem(data){
     const item=data.item;
+    const {theme}=this.props;
     const Item=this.storeName===FLAG_STORAGE.flag_popular?PopularItem:TrendingItem
     return <Item projectModel={item} 
+            theme={theme}
             onSelect={(callback)=>{
-              NavigatorUtil.gotoPage({projectModel:item,flag:this.storeName,callback},'DetailPage')
+              NavigatorUtil.gotoPage({projectModel:item,flag:this.storeName,theme:theme,callback},'DetailPage')
             }}
             onFavorite={(item,isFavoriter)=>{this.onFavorite(item,isFavoriter)}}
     ></Item>

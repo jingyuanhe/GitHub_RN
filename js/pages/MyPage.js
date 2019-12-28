@@ -49,6 +49,10 @@ class MyPage extends Component{
         params.isRemoveKey=menu===MORE_MENU.Remove_Key;
         params.flag=menu!==MORE_MENU.Custom_Language?FLAG_LANGUAGE.flag_key:FLAG_LANGUAGE.flag_language;
         break;
+      case MORE_MENU.Custom_Theme:
+        const {onShowCustomThemeView}=this.props;
+        onShowCustomThemeView(true);
+        break;
       case MORE_MENU.Feedback:
         let url='mailto:389026847@qq.com';
         Linking.canOpenURL(url).then(supported => {
@@ -65,13 +69,16 @@ class MyPage extends Component{
     }
   }
   getItem(menu){
-    return viewUtil.getMenuItem(()=>this.onClick(menu),menu,THEME_COLOR)
+    const {theme}=this.props;
+    return viewUtil.getMenuItem(()=>this.onClick(menu),menu,theme.themeColor)
   }
   render(){
+    const {theme}=this.props;
     const statusBar={
-      backgroundColor:THEME_COLOR
+      backgroundColor:theme.themeColor
     }
-    const navigationBar=<NavigationBar title={'我的'} statusBar={statusBar} style={{backgroundColor:THEME_COLOR}}></NavigationBar>
+  
+    const navigationBar=<NavigationBar title={'我的'} statusBar={statusBar} style={theme.styles.navBar}></NavigationBar>
     return (
       <View style={GlobalStyles.root_container}>
         {navigationBar}
@@ -84,14 +91,14 @@ class MyPage extends Component{
               <Ionicons
                 name={MORE_MENU.About.icon}
                 size={40}
-                style={{marginRight:10,color:THEME_COLOR}}
+                style={{marginRight:10,color:theme.themeColor}}
               ></Ionicons>
               <Text>Github Popular</Text>
             </View>
             <Ionicons
                 name={'ios-arrow-forward'}
                 size={16}
-                style={{marginRight:10,color:THEME_COLOR,alignSelf:'center'}}
+                style={{marginRight:10,color:theme.themeColor,alignSelf:'center'}}
               ></Ionicons>
           </TouchableOpacity>
           <View style={GlobalStyles.line}></View>
@@ -139,7 +146,10 @@ const styles = StyleSheet.create({
     color:'grey'
   }
 });
-const mapActionToProps=dispatch=>({
-  onThemeChange:theme=>dispatch(actions.onThemeChange(theme))
+const mapStateToProps=state=>({
+  theme:state.theme.theme
 })
-export default connect(null,mapActionToProps)(MyPage);
+const mapActionToProps=dispatch=>({
+  onShowCustomThemeView:show=>dispatch(actions.onShowCustomThemeView(true))
+})
+export default connect(mapStateToProps,mapActionToProps)(MyPage);

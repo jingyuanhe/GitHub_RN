@@ -81,7 +81,7 @@ const tabs={
 class TabBarComponent extends Component{
   
   render(){
-    return <BottomTabBar {...this.props} activeTintColor={this.props.theme}/>
+    return <BottomTabBar {...this.props} activeTintColor={this.props.theme.themeColor}/>
   }
 }
 class DyNamicTabNavigator extends Component{
@@ -95,7 +95,7 @@ class DyNamicTabNavigator extends Component{
       return createBottomTabNavigator(showTabs,{
         tabBarComponent:props=>{
           return <TabBarComponent {...props} theme={theme}></TabBarComponent>
-        }
+        },
       })
     }
     render(){
