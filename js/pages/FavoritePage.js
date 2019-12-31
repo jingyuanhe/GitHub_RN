@@ -48,7 +48,10 @@ class FavoritePage extends Component{
           tabStyle:styles.tabStyle,
           upperCaseLabel:false,
           indicatorStyle:styles.indicatorStyle,
-          labelStyle:styles.labelStyle
+          labelStyle:styles.labelStyle,
+          style:{
+            backgroundColor:theme.themeColor
+          },
         }
       }
     ))

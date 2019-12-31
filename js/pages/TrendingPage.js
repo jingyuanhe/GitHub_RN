@@ -97,6 +97,7 @@ class TrendingPage extends Component{
   }
   _tabNav(){
     const {languages}=this.props;
+    const {theme}=this.props;
     this.tabNav=languages.length?createAppContainer(createMaterialTopTabNavigator(
       this._getTabs(),{
         tabBarOptions:{
@@ -104,7 +105,10 @@ class TrendingPage extends Component{
           scrollEnabled:true,
           upperCaseLabel:false,
           indicatorStyle:styles.indicatorStyle,
-          labelStyle:styles.labelStyle
+          labelStyle:styles.labelStyle,
+          style:{
+            backgroundColor:theme.themeColor
+          },
         },
         lazy:true
       }

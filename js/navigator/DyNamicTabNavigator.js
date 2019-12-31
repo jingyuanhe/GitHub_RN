@@ -89,19 +89,22 @@ class DyNamicTabNavigator extends Component{
       super(props);
     }
     _tabNavigator(){
+      if(this.Tabs){
+        return this.Tabs;
+      }
       const {PopularPage,TrendingPage,FavoritePage,MyPage}=tabs;
       const showTabs={PopularPage,TrendingPage,FavoritePage,MyPage}
       const theme=this.props.theme;
-      return createBottomTabNavigator(showTabs,{
+      PopularPage.navigationOptions.tabBarLabel = '最热';//动态配置Tab属性
+      return this.Tabs=createAppContainer(createBottomTabNavigator(showTabs,{
         tabBarComponent:props=>{
           return <TabBarComponent {...props} theme={theme}></TabBarComponent>
         },
-      })
+      }))
     }
     render(){
-      const Tab=createAppContainer(this._tabNavigator());
-      return (
-        <Tab 
+      const Tab=this._tabNavigator();
+      return <Tab 
           onNavigationStateChange={(prevState,nextState,action)=>{
             EventBus.getInstance().fireEvent(NavigationUtil.bottom_tab_select, {
               from:prevState.index,
@@ -109,7 +112,6 @@ class DyNamicTabNavigator extends Component{
             })
           }}
         />
-      );
     }
 }
 
