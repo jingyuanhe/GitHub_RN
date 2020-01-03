@@ -6,7 +6,8 @@ import {
   Button,
   FlatList,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from 'react-native';
 import NavigatorUtil from '../navigator/NavigatorUtil'
 import NavigationBar from "../common/NavigationBar";
@@ -26,6 +27,7 @@ import FavoriteUtil from "../util/FavoriteUtil";
 import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
 import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
+import Ionicons from 'react-native-vector-icons/Ionicons'
 class PopularPage extends Component{
   constructor(props){
     super(props);
@@ -49,6 +51,28 @@ class PopularPage extends Component{
     })
     return tabs
   }
+  renderRightButton(){
+    const {theme}=this.props;
+    return <TouchableOpacity
+      onPress={()=>{NavigatorUtil.gotoPage({theme},'SearchPage')}}
+    >
+      <View style={{marginRight:8,padding:5}}>
+        <Ionicons
+          name={'ios-search'}
+          size={24}
+          style={
+            {
+              marginRight:8,
+              color:'white',
+              alignSelf:'center'
+            }
+          }
+        >
+
+        </Ionicons>
+      </View>
+    </TouchableOpacity>
+  }
   render(){
     const {keys}=this.props;
     const {theme}=this.props;
@@ -70,7 +94,7 @@ class PopularPage extends Component{
     const statusBar={
       backgroundColor:theme.themeColor
     }
-    const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={theme.styles.navBar}></NavigationBar>
+    const navigationBar=<NavigationBar title={'最热'} statusBar={statusBar} style={theme.styles.navBar} rightButton={this.renderRightButton()}></NavigationBar>
     return (
       <View style={{flex:1,marginTop:0}}>
           {navigationBar}

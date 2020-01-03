@@ -2,6 +2,7 @@ import types from "../types";
 import DataStore,{FLAG_STORAGE} from "../../expand/dao/DataStore";
 import {handleData,_projectModels,doCallBack} from "../ActionUtil";
 import ArrayUtil from '../../util/ArrayUtil'
+import Utils from '../../util/Utils'
 const API_URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 const CANCEL_TOKENS=[];
@@ -20,8 +21,10 @@ export function onSearch(inputKey,pageSize,token,favoriteDao,popularKeys,callBac
                 return
             }
             let items=responseData.items;
-            handleData(types.SEARCH_REFRESH_SUCCESS,dispatch,"",{data:items},pageSize,favoriteDao,{
-                showButtomButtom:!checkKeyIsExist(popularKeys,inputKey),
+            console.log(!Utils.checkKeyIsExist(popularKeys,inputKey))
+
+            handleData(types.SEARCH_REFRESH_SUCCESS,dispatch,"",{data: items},pageSize,favoriteDao,{
+                showButtomButton:!Utils.checkKeyIsExist(popularKeys,inputKey),
                 inputKey
             })
         }).catch(err=>{
@@ -48,7 +51,9 @@ function hasCancel(token,isRemove){
 }
 function checkKeyIsExist(keys,key){
     for(let i=0;i<keys.length;i++){
-        if(key.toLowerCase()===keys[i]name.toLowerCase()) return true
+        if(key.toLowerCase()===keys[i].name.toLowerCase()){
+            return true
+        }
     }
     return false;
 }

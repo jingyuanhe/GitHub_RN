@@ -5,7 +5,7 @@ const defaultState={
     isLoading:false,
     projectModels:[],
     hideLoadingMore:true,
-    showBottomButton:false
+    showButtomButton:false
 };
 export default function onAction(state=defaultState,action){
     switch(action.type){
@@ -14,7 +14,8 @@ export default function onAction(state=defaultState,action){
                 ...state,
                 isLoading:true,
                 hideLoadingMore:true,
-                showBottomButton:false
+                showButtomButton:false,
+                showText:'取消',
             }
         }
         case types.SEARCH_REFRESH_SUCCESS:
@@ -26,7 +27,7 @@ export default function onAction(state=defaultState,action){
                 projectModels:action.projectModels,//此次要展示的数据
                 isLoading:false,
                 showText:'搜索',
-                showBottomButton:action.showBottomButton,
+                showButtomButton:action.showButtomButton,
                 inputKey:action.inputKey
             }
         case types.SEARCH_FAIL:{

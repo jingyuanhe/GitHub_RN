@@ -3,12 +3,13 @@ import Utils from '../util/Utils'
 export function handleData(actionType,dispatch,storeName,data,pageSize,favoriteDao,params){
     let fixItems=[];
     if(data){
-        if(Array.isArray(data)){
-            fixItems=data;
+        if(Array.isArray(data.data)){
+            fixItems=data.data;
         }else if(Array.isArray(data.data.items)){
             fixItems=data.data.items
         }
     }
+
     let showItems=pageSize>fixItems.length?fixItems:fixItems.slice(0,pageSize);
     _projectModels(showItems,favoriteDao,projectModels=>{
         dispatch({
