@@ -28,6 +28,7 @@ import EventBus from 'react-native-event-bus'
 import NavigationUtil from '../util/NavigationUtil.js'
 import { FLAG_LANGUAGE } from "../expand/dao/LanguageDao";
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import AnalyticsUtil from '../util/AnalyticsUtil'
 class PopularPage extends Component{
   constructor(props){
     super(props);
@@ -54,7 +55,9 @@ class PopularPage extends Component{
   renderRightButton(){
     const {theme}=this.props;
     return <TouchableOpacity
-      onPress={()=>{NavigatorUtil.gotoPage({theme},'SearchPage')}}
+      onPress={()=>{
+        AnalyticsUtil.onEvent("SearchButtonClick");
+        NavigatorUtil.gotoPage({theme},'SearchPage')}}
     >
       <View style={{marginRight:8,padding:5}}>
         <Ionicons
